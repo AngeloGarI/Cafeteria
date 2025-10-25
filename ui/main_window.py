@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QMainWindow, QPushButton, QVBoxLayout, QWidget
 from Cafeteria.modules.inventory import InventoryWindow
-from modules.sales import SalesWindow
-from modules.reports import ReportsWindow
+from Cafeteria.modules.sales import SalesWindow
+from Cafeteria.modules.reports import ReportsWindow
 
 class MainWindow(QMainWindow):
     def __init__(self, rol):
