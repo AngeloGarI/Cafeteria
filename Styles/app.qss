@@ -1,0 +1,47 @@
+/* Fondo principal */
+QMainWindow {
+    background-color: #F5F0E6; /* beige claro */
+}
+
+/* Botones */
+QPushButton {
+    background-color: #8B5E3C; /* café */
+    color: #FFFFFF;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-weight: bold;
+    font-size: 14px;
+}
+QPushButton:hover {
+    background-color: #A97455;
+}
+QPushButton:pressed {
+    background-color: #6B4226;
+}
+
+/* Campos de texto */
+QLineEdit, QComboBox {
+    background-color: #FFF8F0;
+    border: 1px solid #C8A97E;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* Etiquetas */
+QLabel {
+    color: #3E2C1C;
+    font-size: 13px;
+}
+
+/* Tablas */
+QTableWidget {
+    background-color: #FFFFFF;
+    alternate-background-color: #F5E9D7;
+    gridline-color: #C8A97E;
+}
+QHeaderView::section {
+    background-color: #8B5E3C;
+    color: white;
+    padding: 5px;
+    border: none;
+}
