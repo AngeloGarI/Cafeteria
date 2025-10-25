@@ -21,7 +21,7 @@ QPushButton:pressed {
 
 /* Campos de texto */
 QLineEdit, QComboBox {
-    background-color: #FFF8F0;
+    background-color: #000000;
     border: 1px solid #C8A97E;
     border-radius: 5px;
     padding: 5px;
