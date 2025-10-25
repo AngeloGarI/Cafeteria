@@ -6,7 +6,7 @@ class LoginWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Login - Cafeteria")
-        self.resize(300, 200)
+        self.resize(500, 400)
         self.setup_ui()
 
     def setup_ui(self):
