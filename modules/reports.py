@@ -1,19 +1,26 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout
-import pandas as pd
 import sqlite3
+import pandas as pd
+import os
+from PyQt6.QtWidgets import (
+    QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox,
+    QComboBox, QTableWidget, QTableWidgetItem, QHeaderView, QHBoxLayout
+)
+from PyQt6.QtCore import Qt
+
 
 class ReportsWindow(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Reportes")
-        self.resize(400, 300)
-        layout = QVBoxLayout()
-        layout.addWidget(QLabel("Generando reporte a Excel...."))
-        self.setLayout(layout)
-        self.export_excel()
+        self.setWindowTitle("Generar Reportes - Cafetería")
+        self.setGeometry(200, 200, 750, 550)
+        self.setStyleSheet("background-color: #f5f0e6; color: #3e2723;")
 
-    def export_excel(self):
-        conn = sqlite3.connect("cafeteria.db")
-        df = pd.read_sql_query("SELECT * FROM inventario", conn)
-        conn.close()
-        df.to_excel("reporte_inventario.xlsx", index=False)
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+
+        # Título
+        title = QLabel("📊 Generador de Reportes")
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title.setStyleSheet("font-size: 18px; font-weight: bold; margin-bottom: 10px;")
+        layout.addWidget(title)
+
