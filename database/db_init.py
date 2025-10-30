@@ -1,18 +1,16 @@
 import sqlite3
 
 def init_db():
-    conn = sqlite3.connect("database/cafeteria.db")
+    conn = sqlite3.connect("cafeteria.db")
     c = conn.cursor()
 
-    # Tabla de usuarios
-    c.execute("""
-        CREATE TABLE IF NOT EXISTS usuarios (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nombre TEXT NOT NULL,
-            correo TEXT UNIQUE NOT NULL,
-            contrasena TEXT NOT NULL
-        );
-    """)
+    # Insertar usuario admin por defecto si no existe
+    c.execute("SELECT COUNT(*) FROM usuarios WHERE usuario = ?", ("admin",))
+    if c.fetchone()[0] == 0:
+        c.execute("""
+            INSERT INTO usuarios (usuario, contrasena, rol)
+            VALUES (?, ?, ?)
+        """, ("admin", "1234", "admin"))
 
     # Tabla de inventario
     c.execute("""
