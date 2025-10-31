@@ -98,4 +98,67 @@ class ReportsWindow(QWidget):
         self.setLayout(layout)
 
         self.load_data_safe("inventario")
-        
+
+
+    def get_db_path(self):
+        db_path = os.path.join(os.path.dirname(__file__), "..", "cafeteria.db")
+        return os.path.abspath(db_path)
+
+    def load_data_safe(self, table_name):
+        try:
+            self.load_data(table_name)
+        except sqlite3.OperationalError as e:
+            QMessageBox.critical(
+                self, "Error de base de datos",
+                f"No se encontró la tabla '{table_name}' en la base de datos.\n\nDetalles:\n{str(e)}"
+            )
+            self.table_widget.clear()
+
+    def load_data(self, table_name):
+        db_path = self.get_db_path()
+        conn = sqlite3.connect(db_path)
+        df = pd.read_sql_query(f"SELECT * FROM {table_name}", conn)
+        conn.close()
+
+        if df.empty:
+            self.table_widget.setRowCount(0)
+            self.table_widget.setColumnCount(0)
+            self.status_label.setText(f"⚠️ La tabla '{table_name}' no tiene registros.")
+            return
+
+        self.table_widget.setRowCount(len(df))
+        self.table_widget.setColumnCount(len(df.columns))
+        self.table_widget.setHorizontalHeaderLabels(df.columns)
+
+        for i, row in df.iterrows():
+            for j, value in enumerate(row):
+                self.table_widget.setItem(i, j, QTableWidgetItem(str(value)))
+
+        self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.status_label.setText(f"Mostrando datos de '{table_name}' ({len(df)} registros).")
+
+        self.current_df = df
+        self.current_table = table_name
+
+    def refresh_data(self):
+        if hasattr(self, "current_table"):
+            self.load_data_safe(self.current_table)
+        else:
+            self.load_data_safe("inventario")
+
+    def export_report(self):
+        if not hasattr(self, "current_df") or self.current_df.empty:
+            QMessageBox.warning(self, "Sin datos", "No hay datos para exportar.")
+            return
+
+        table_name = getattr(self, "current_table", "tabla")
+        export_dir = os.path.join(os.path.dirname(__file__), "..", "reports")
+        os.makedirs(export_dir, exist_ok=True)
+        export_path = os.path.join(export_dir, f"reporte_{table_name}.xlsx")
+
+        self.current_df.to_excel(export_path, index=False)
+        self.status_label.setText(f"✅ Reporte de {table_name} exportado correctamente.")
+        QMessageBox.information(
+            self, "Reporte generado",
+            f"El reporte de '{table_name}' fue exportado con éxito.\n\nUbicación:\n{export_path}"
+        )
