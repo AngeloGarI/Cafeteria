@@ -10,7 +10,7 @@ class InventoryWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Gestión de inventario")
-        self.resize(600, 400)
+        self.resize(700, 400)
         self.setup_ui()
         self.load_data_safe()
 
@@ -26,14 +26,17 @@ class InventoryWindow(QWidget):
         self.price_input = QLineEdit()
         self.price_input.setPlaceholderText("Precio")
 
-        # Botón Agregar
+        # Botones
         self.add_btn = QPushButton("Agregar")
         self.add_btn.clicked.connect(self.add_item_safe)
+        self.delete_btn = QPushButton("Eliminar seleccionado")
+        self.delete_btn.clicked.connect(self.delete_item_safe)
 
         form_layout.addWidget(self.name_input)
         form_layout.addWidget(self.qty_input)
         form_layout.addWidget(self.price_input)
         form_layout.addWidget(self.add_btn)
+        form_layout.addWidget(self.delete_btn)
 
         # Tabla
         self.table = QTableWidget()
@@ -44,14 +47,10 @@ class InventoryWindow(QWidget):
         layout.addWidget(self.table)
         self.setLayout(layout)
 
-    # --- Función auxiliar para obtener ruta de la base de datos ---
     def get_db_path(self):
         db_path = os.path.join(os.path.dirname(__file__), "..", "cafeteria.db")
-        db_path = os.path.abspath(db_path)
-        print("📁 Usando base de datos:", db_path)  # Para depurar
-        return db_path
+        return os.path.abspath(db_path)
 
-    # --- Carga de datos segura ---
     def load_data_safe(self):
         try:
             self.load_data()
@@ -59,7 +58,6 @@ class InventoryWindow(QWidget):
             traceback.print_exc()
             QMessageBox.critical(self, "Error", f"Error al cargar inventario:\n{e}")
 
-    # --- Cargar datos desde la BD ---
     def load_data(self):
         conn = sqlite3.connect(self.get_db_path())
         c = conn.cursor()
@@ -72,7 +70,6 @@ class InventoryWindow(QWidget):
             for j, val in enumerate(row):
                 self.table.setItem(i, j, QTableWidgetItem(str(val)))
 
-    # --- Agregar datos segura ---
     def add_item_safe(self):
         try:
             self.add_item()
@@ -80,7 +77,6 @@ class InventoryWindow(QWidget):
             traceback.print_exc()
             QMessageBox.critical(self, "Error", f"No se pudo agregar el producto:\n{e}")
 
-    # --- Agregar producto al inventario ---
     def add_item(self):
         nombre = self.name_input.text().strip()
         cantidad = self.qty_input.text().strip()
@@ -90,7 +86,6 @@ class InventoryWindow(QWidget):
             QMessageBox.warning(self, "Error", "Completa todos los campos")
             return
 
-        # Validar números
         try:
             cantidad = int(cantidad)
             precio = float(precio)
@@ -98,12 +93,18 @@ class InventoryWindow(QWidget):
             QMessageBox.warning(self, "Error", "Cantidad y precio deben ser números")
             return
 
+        # Validación extra: cantidad y precio deben ser mayores que 0
+        if cantidad <= 0:
+            QMessageBox.warning(self, "Error", "La cantidad debe ser mayor que 0")
+            return
+        if precio <= 0:
+            QMessageBox.warning(self, "Error", "El precio debe ser mayor que 0")
+            return
+
         conn = sqlite3.connect(self.get_db_path())
         c = conn.cursor()
-        c.execute(
-            "INSERT INTO inventario (producto, cantidad, precio) VALUES (?, ?, ?)",
-            (nombre, cantidad, precio)
-        )
+        c.execute("INSERT INTO inventario (producto, cantidad, precio) VALUES (?, ?, ?)",
+                  (nombre, cantidad, precio))
         conn.commit()
         conn.close()
 
@@ -111,3 +112,35 @@ class InventoryWindow(QWidget):
         self.name_input.clear()
         self.qty_input.clear()
         self.price_input.clear()
+
+    def delete_item_safe(self):
+        try:
+            self.delete_item()
+        except Exception as e:
+            traceback.print_exc()
+            QMessageBox.critical(self, "Error", f"No se pudo eliminar el producto:\n{e}")
+
+    def delete_item(self):
+        row = self.table.currentRow()
+        if row < 0:
+            QMessageBox.warning(self, "Error", "Selecciona un producto para eliminar")
+            return
+
+        producto = self.table.item(row, 0).text()
+        confirmar = QMessageBox.question(
+            self, "Confirmar eliminación",
+            f"¿Seguro que deseas eliminar '{producto}' del inventario?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+
+        if confirmar == QMessageBox.StandardButton.No:
+            return
+
+        conn = sqlite3.connect(self.get_db_path())
+        c = conn.cursor()
+        c.execute("DELETE FROM inventario WHERE producto = ?", (producto,))
+        conn.commit()
+        conn.close()
+
+        self.load_data_safe()
+        QMessageBox.information(self, "Eliminado", f"'{producto}' fue eliminado del inventario.")
