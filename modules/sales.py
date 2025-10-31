@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (
     QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout,
-    QComboBox, QTableWidget, QTableWidgetItem, QMessageBox, QFileDialog, QInputDialog
+    QComboBox, QTableWidget, QTableWidgetItem, QMessageBox, QFileDialog
 )
 from PyQt6.QtCore import Qt
 import sqlite3

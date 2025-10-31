@@ -35,7 +35,7 @@ QLabel {
 
 /* Tablas */
 QTableWidget {
-    background-color: #FFFFFF;
+    background-color: #000000;
     alternate-background-color: #F5E9D7;
     gridline-color: #C8A97E;
 }
