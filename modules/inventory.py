@@ -130,7 +130,7 @@ class InventoryWindow(QWidget):
         confirmar = QMessageBox.question(
             self, "Confirmar eliminación",
             f"¿Seguro que deseas eliminar '{producto}' del inventario?",
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+            QMessageBox.StandardButton.Sí | QMessageBox.StandardButton.No
         )
 
         if confirmar == QMessageBox.StandardButton.No:
