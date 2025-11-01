@@ -1,6 +1,8 @@
 from PyQt6.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox, QDialog, QFormLayout
+from PyQt6.QtGui import QPixmap, QIcon
+from PyQt6.QtCore import Qt
 import sqlite3
-import hashlib  # Para hashing de contraseñas (seguridad)
+import hashlib
 from Cafeteria.ui.main_window import MainWindow
 
 
@@ -13,14 +15,25 @@ class LoginWindow(QWidget):
 
     def setup_ui(self):
         layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        logo_label = QLabel()
+        logo_pixmap = QPixmap("icons/logo.png").scaled(150, 150, Qt.AspectRatioMode.KeepAspectRatio)
+        logo_label.setPixmap(logo_pixmap)
+        logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(logo_label)
+
         self.label_user = QLabel("Usuario:")
+        self.label_user.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.input_user = QLineEdit()
         self.input_user.setPlaceholderText("Ingresa tu usuario")
         self.label_pass = QLabel("Contraseña:")
+        self.label_pass.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.input_pass = QLineEdit()
         self.input_pass.setEchoMode(QLineEdit.EchoMode.Password)
         self.input_pass.setPlaceholderText("Ingresa tu contraseña")
         self.button_login = QPushButton("Ingresar")
+        self.button_login.setIcon(QIcon("icons/login.png"))  # Ícono en botón
         self.button_login.clicked.connect(self.check_login)
 
         self.button_forgot = QPushButton("¿Olvidaste tu contraseña?")
@@ -42,7 +55,6 @@ class LoginWindow(QWidget):
             QMessageBox.warning(self, "Error", "Completa todos los campos.")
             return
 
-        # Validación extra: Usuario alfanumérico
         if not usuario.isalnum():
             QMessageBox.warning(self, "Error", "Usuario inválido.")
             return
@@ -50,7 +62,6 @@ class LoginWindow(QWidget):
         try:
             conn = sqlite3.connect("cafeteria.db")
             c = conn.cursor()
-            # Hashing para seguridad (algoritmo de encriptación)
             hashed_contrasena = hashlib.sha256(contrasena.encode()).hexdigest()
             c.execute("SELECT rol FROM usuarios WHERE usuario = ? AND contrasena = ?", (usuario, hashed_contrasena))
             result = c.fetchone()
@@ -58,11 +69,10 @@ class LoginWindow(QWidget):
 
             if result:
                 rol = result[0]
-                # Validación de rol
                 if rol not in ["admin", "empleado"]:
                     QMessageBox.warning(self, "Error", "Rol no autorizado.")
                     return
-                self.open_main_window(rol)
+                self.open_main_window(rol)  # Sin mensaje molesto
             else:
                 QMessageBox.warning(self, "Error", "Usuario o contraseña incorrectos.")
                 self.input_pass.clear()
