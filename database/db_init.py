@@ -1,12 +1,11 @@
 import sqlite3
-import hashlib  # Agregado para hashing de contraseñas
+import hashlib
 
 def init_db():
-    try:  # Agregado: Manejo de errores para evitar crashes
+    try:
         conn = sqlite3.connect("cafeteria.db")
         c = conn.cursor()
 
-        # Crear tabla usuarios si no existe (agregado para claridad)
         c.execute("""
             CREATE TABLE IF NOT EXISTS usuarios (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -16,16 +15,14 @@ def init_db():
             );
         """)
 
-        # Insertar usuario admin por defecto si no existe (con hash)
         c.execute("SELECT COUNT(*) FROM usuarios WHERE usuario = ?", ("admin",))
         if c.fetchone()[0] == 0:
-            hashed_password = hashlib.sha256("1234".encode()).hexdigest()  # Hash de la contraseña por defecto
+            hashed_password = hashlib.sha256("1234".encode()).hexdigest()
             c.execute("""
                 INSERT INTO usuarios (usuario, contrasena, rol)
                 VALUES (?, ?, ?)
             """, ("admin", hashed_password, "admin"))
 
-        # Tabla de inventario
         c.execute("""
             CREATE TABLE IF NOT EXISTS inventario (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,7 +34,6 @@ def init_db():
             );
         """)
 
-        # Tabla de ventas
         c.execute("""
             CREATE TABLE IF NOT EXISTS ventas (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -51,7 +47,7 @@ def init_db():
         conn.commit()
         conn.close()
         print("Base de datos creada correctamente ✅")
-    except Exception as e:  # Agregado: Capturar errores
+    except Exception as e:
         print(f"Error al inicializar la base de datos: {e}")
 
 if __name__ == "__main__":
