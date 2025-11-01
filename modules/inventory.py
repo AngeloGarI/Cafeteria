@@ -245,6 +245,5 @@ class InventoryWindow(QWidget):
             QMessageBox.warning(self, "Stock bajo", f"Productos con poco stock:\n{mensaje}")
 
     def refresh_data(self):
-        # Método para recarga manual/rápida
         self.load_data_safe()
         QMessageBox.information(self, "Refrescado", "Datos del inventario actualizados.")
