@@ -18,7 +18,6 @@ class ReportsWindow(QWidget):
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        # Título
         title = QLabel("📊 Generador de Reportes")
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title.setStyleSheet("font-size: 18px; font-weight: bold; margin-bottom: 10px;")
@@ -72,6 +71,36 @@ class ReportsWindow(QWidget):
                 """)
         self.export_button.clicked.connect(self.export_report)
         controls_layout.addWidget(self.export_button)
+
+        # Botón para advertencias de vencimiento
+        self.warning_btn = QPushButton("Ver Advertencias de Vencimiento")
+        self.warning_btn.setStyleSheet("""
+                    QPushButton {
+                        background-color: #FF9800;
+                        color: white;
+                        padding: 8px 12px;
+                        font-size: 13px;
+                        border-radius: 6px;
+                    }
+                    QPushButton:hover { background-color: #F57C00; }
+                """)
+        self.warning_btn.clicked.connect(self.show_expiry_warnings)
+        controls_layout.addWidget(self.warning_btn)
+
+        # Nuevo botón para stock bajo
+        self.low_stock_btn = QPushButton("Ver Stock Bajo")
+        self.low_stock_btn.setStyleSheet("""
+                    QPushButton {
+                        background-color: #F44336;
+                        color: white;
+                        padding: 8px 12px;
+                        font-size: 13px;
+                        border-radius: 6px;
+                    }
+                    QPushButton:hover { background-color: #D32F2F; }
+                """)
+        self.low_stock_btn.clicked.connect(self.show_low_stock)
+        controls_layout.addWidget(self.low_stock_btn)
 
         layout.addLayout(controls_layout)
 
@@ -139,30 +168,44 @@ class ReportsWindow(QWidget):
         self.current_df = df
         self.current_table = table_name
 
-        if table_name == "inventario":
-            self.check_expiring_products()
-
-    def check_expiring_products(self):
-        # Verifica productos que vencen en 7 días
-        conn = sqlite3.connect(self.get_db_path())
-        c = conn.cursor()
-        c.execute("SELECT producto, fecha_vencimiento FROM inventario WHERE fecha_vencimiento IS NOT NULL")
-        rows = c.fetchall()
-        conn.close()
+    def show_expiry_warnings(self):
+        if not hasattr(self, "current_df") or self.current_df.empty or self.current_table != "inventario":
+            QMessageBox.information(self, "Sin datos", "No hay datos de inventario para verificar.")
+            return
 
         expiring = []
-        for p, f in rows:
-            if f:
+        for _, row in self.current_df.iterrows():
+            fecha = row.get("fecha_vencimiento")
+            if fecha:
                 try:
-                    venc = datetime.strptime(f, "%Y-%m-%d")
+                    venc = datetime.strptime(fecha, "%Y-%m-%d")
                     if (venc - datetime.now()).days <= 7 and (venc - datetime.now()).days >= 0:
-                        expiring.append(f"{p} (vence: {f})")
+                        expiring.append(f"{row['producto']} (vence: {fecha})")
                 except ValueError:
-                    pass  # Ignora fechas inválidas
+                    pass
 
         if expiring:
             mensaje = "\n".join(expiring)
             QMessageBox.warning(self, "Productos por vencer", f"Estos productos vencen pronto:\n{mensaje}")
+        else:
+            QMessageBox.information(self, "Sin advertencias", "No hay productos por vencer en los próximos 7 días.")
+
+    def show_low_stock(self):
+        if not hasattr(self, "current_df") or self.current_df.empty or self.current_table != "inventario":
+            QMessageBox.information(self, "Sin datos", "No hay datos de inventario para verificar.")
+            return
+
+        low_stock = []
+        for _, row in self.current_df.iterrows():
+            cantidad = row.get("cantidad")
+            if cantidad is not None and cantidad <= 5:
+                low_stock.append(f"{row['producto']} (stock: {cantidad})")
+
+        if low_stock:
+            mensaje = "\n".join(low_stock)
+            QMessageBox.warning(self, "Stock bajo", f"Estos productos tienen poco stock:\n{mensaje}")
+        else:
+            QMessageBox.information(self, "Sin stock bajo", "No hay productos con stock bajo (<=5).")
 
     def refresh_data(self):
         if hasattr(self, "current_table"):
