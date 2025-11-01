@@ -1,47 +1,94 @@
-/* Fondo principal */
-QMainWindow {
-    background-color: #F5F0E6; /* beige claro */
+/* Fondo principal con gradiente sutil */
+QMainWindow, QWidget {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #F5F0E6, stop:1 #E8D5B7);
+    font-family: 'Segoe UI', Arial, sans-serif; /* Fuente moderna */
+    font-size: 14px; /* Más grande para accesibilidad */
 }
 
-/* Botones */
+/* Botones con sombras y gradientes */
 QPushButton {
-    background-color: #8B5E3C; /* café */
-    color: #FFFFFF;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #8B5E3C, stop:1 #6B4226);
+    color: white;
+    border: none;
     border-radius: 8px;
-    padding: 8px 12px;
+    padding: 10px 15px;
     font-weight: bold;
-    font-size: 14px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* Sombra para profundidad */
 }
 QPushButton:hover {
-    background-color: #A97455;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #A97455, stop:1 #8B5E3C);
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
 }
 QPushButton:pressed {
-    background-color: #6B4226;
+    background: #6B4226;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.4);
 }
 
-/* Campos de texto */
+/* Campos de texto con foco */
 QLineEdit, QComboBox {
-    background-color: #000000;
-    border: 1px solid #C8A97E;
-    border-radius: 5px;
-    padding: 5px;
+    background-color: #FFFFFF;
+    border: 2px solid #C8A97E;
+    border-radius: 6px;
+    padding: 8px;
+    color: #000000;
+}
+QLineEdit:focus, QComboBox:focus {
+    border-color: #8B5E3C; /* Resalta al enfocar */
 }
 
-/* Etiquetas */
+/* Etiquetas con mejor legibilidad */
 QLabel {
-    color: #3E2C1C;
-    font-size: 13px;
+    color: #000000;
+    font-size: 14px;
 }
 
-/* Tablas */
+/* Tablas con sorting y mejor apariencia */
 QTableWidget {
-    background-color: #000000;
+    background-color: #FFFFFF;
     alternate-background-color: #F5E9D7;
     gridline-color: #C8A97E;
+    border-radius: 8px;
+    selection-background-color: #A97455;
 }
 QHeaderView::section {
-    background-color: #8B5E3C;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #8B5E3C, stop:1 #6B4226);
     color: white;
-    padding: 5px;
+    padding: 8px;
     border: none;
+    font-weight: bold;
+}
+QTableWidget::item {
+    color: #000000;
+    padding: 5px;
+}
+
+/* Tabs con íconos y efectos */
+QTabWidget::pane { border: 2px solid #C8A97E; background: #F5F0E6; border-radius: 10px; }
+QTabBar::tab { background: #8B5E3C; color: white; padding: 12px; border-radius: 8px; margin: 2px; min-width: 100px; }
+QTabBar::tab:selected { background: #A97455; font-weight: bold; }
+QTabBar::tab:hover { background: #6B4226; }
+
+/* Diálogos y mensajes con estilo */
+QDialog, QMessageBox {
+    background: #F5F0E6;
+    border-radius: 10px;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+}
+QDialog QLabel, QMessageBox QLabel {
+    color: #000000;
+}
+
+/* Barra de menú */
+QMenuBar { background: #8B5E3C; color: white; }
+QMenuBar::item { background: transparent; padding: 5px 10px; }
+QMenuBar::item:selected { background: #A97455; }
+
+/* Animaciones para transiciones */
+QWidget {
+    transition: opacity 0.5s ease-in-out; /* Soporte para fade */
+}
+
+/* Íconos en botones/tablas */
+QPushButton {
+    qproperty-iconSize: 20px; /* Tamaño de íconos */
 }
