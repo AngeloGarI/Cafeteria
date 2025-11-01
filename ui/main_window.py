@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QMainWindow, QTabWidget, QWidget, QVBoxLayout, QMenuBar, QMessageBox, QDialog, QFormLayout, QLineEdit, QComboBox, QPushButton
+from PyQt6.QtWidgets import QMainWindow, QTabWidget, QWidget, QVBoxLayout, QMenuBar, QMessageBox, QDialog, QFormLayout, QLineEdit, QComboBox, QPushButton, QLabel
 from PyQt6.QtGui import QAction, QIcon
-from PyQt6.QtCore import QPropertyAnimation, QEasingCurve
+from PyQt6.QtCore import QPropertyAnimation, QEasingCurve, Qt
 from Cafeteria.modules.inventory import InventoryWindow
 from Cafeteria.modules.sales import SalesWindow
 from Cafeteria.modules.reports import ReportsWindow
@@ -13,7 +13,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Sistema de Cafetería - Profesional")
         self.resize(1000, 700)
         self.rol = rol
-        self.animation = None  # Evita recursividad
+        self.animation = None
         self.setup_ui()
         self.setup_menu()
         self.animate_tabs()
@@ -37,19 +37,21 @@ class MainWindow(QMainWindow):
         self.tabs.addTab(self.sales_tab, QIcon("icons/sales.png"), "Ventas")
         self.tabs.addTab(self.reports_tab, QIcon("icons/reports.png"), "Reportes")
 
-        # Recarga automática al cambiar tab
         self.tabs.currentChanged.connect(self.on_tab_changed)
 
         if self.rol != "admin":
             self.tabs.setTabEnabled(0, False)
-            QMessageBox.information(self, "Acceso Limitado", "Como empleado, solo puedes acceder a Ventas y Reportes.")
+            access_label = QLabel("Acceso: Solo Ventas y Reportes")
+            access_label.setStyleSheet("font-size: 14px; color: #3E2C1C; font-weight: bold; margin: 10px;")
+            access_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.sales_tab.layout().insertWidget(0, access_label)  # Agrega arriba en Ventas
 
         self.setCentralWidget(self.tabs)
 
     def on_tab_changed(self, index):
-        if index == 0:  # Inventario
+        if index == 0:
             self.inventory_tab.refresh_data()
-        elif index == 1:  # Ventas: Recarga productos para mostrar nuevos agregados
+        elif index == 1:
             self.sales_tab.load_products_safe()
 
     def setup_menu(self):
@@ -71,7 +73,7 @@ class MainWindow(QMainWindow):
         view_menu.addAction(theme_action)
 
     def animate_tabs(self):
-        if self.animation is None:  # Evita recursividad
+        if self.animation is None:
             self.animation = QPropertyAnimation(self, b"windowOpacity")
             self.animation.setDuration(500)
             self.animation.setStartValue(0.0)
