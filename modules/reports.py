@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
     QComboBox, QTableWidget, QTableWidgetItem, QHeaderView, QHBoxLayout
 )
 from PyQt6.QtCore import Qt
-
+from datetime import datetime, timedelta
 
 class ReportsWindow(QWidget):
     def __init__(self):
@@ -99,7 +99,6 @@ class ReportsWindow(QWidget):
 
         self.load_data_safe("inventario")
 
-
     def get_db_path(self):
         db_path = os.path.join(os.path.dirname(__file__), "..", "cafeteria.db")
         return os.path.abspath(db_path)
@@ -139,6 +138,31 @@ class ReportsWindow(QWidget):
 
         self.current_df = df
         self.current_table = table_name
+
+        if table_name == "inventario":
+            self.check_expiring_products()
+
+    def check_expiring_products(self):
+        # Verifica productos que vencen en 7 días
+        conn = sqlite3.connect(self.get_db_path())
+        c = conn.cursor()
+        c.execute("SELECT producto, fecha_vencimiento FROM inventario WHERE fecha_vencimiento IS NOT NULL")
+        rows = c.fetchall()
+        conn.close()
+
+        expiring = []
+        for p, f in rows:
+            if f:
+                try:
+                    venc = datetime.strptime(f, "%Y-%m-%d")
+                    if (venc - datetime.now()).days <= 7 and (venc - datetime.now()).days >= 0:
+                        expiring.append(f"{p} (vence: {f})")
+                except ValueError:
+                    pass  # Ignora fechas inválidas
+
+        if expiring:
+            mensaje = "\n".join(expiring)
+            QMessageBox.warning(self, "Productos por vencer", f"Estos productos vencen pronto:\n{mensaje}")
 
     def refresh_data(self):
         if hasattr(self, "current_table"):
