@@ -21,10 +21,9 @@ class SalesWindow(QWidget):
     def setup_ui(self):
         layout = QVBoxLayout()
 
-        # Fila de entradas
         form_layout = QHBoxLayout()
         self.product_combo = QComboBox()
-        self.product_combo.setEditable(True)  # Permite escribir producto manual
+        self.product_combo.setEditable(True)
         self.qty_input = QLineEdit()
         self.qty_input.setPlaceholderText("Cantidad")
         self.add_btn = QPushButton("Registrar Venta")
@@ -36,11 +35,9 @@ class SalesWindow(QWidget):
         form_layout.addWidget(self.qty_input)
         form_layout.addWidget(self.add_btn)
 
-        # Botón exportar ventas
         self.export_btn = QPushButton("Exportar Ventas a Excel")
         self.export_btn.clicked.connect(self.export_sales_safe)
 
-        # Tabla de ventas
         self.table = QTableWidget()
         self.table.setColumnCount(4)
         self.table.setHorizontalHeaderLabels(["Producto", "Cantidad", "Total", "Fecha"])
@@ -55,7 +52,6 @@ class SalesWindow(QWidget):
         db_path = os.path.join(os.path.dirname(__file__), "..", "cafeteria.db")
         return os.path.abspath(db_path)
 
-    # --- Cargar productos del inventario ---
     def load_products_safe(self):
         try:
             self.load_products()
@@ -73,7 +69,6 @@ class SalesWindow(QWidget):
         for row in rows:
             self.product_combo.addItem(row[0])
 
-    # --- Registrar venta ---
     def add_sale_safe(self):
         try:
             self.add_sale()
@@ -101,7 +96,6 @@ class SalesWindow(QWidget):
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
 
-        # Verificar si producto existe en inventario y stock
         c.execute("SELECT cantidad, precio FROM inventario WHERE producto = ?", (producto,))
         inv = c.fetchone()
         precio = 0.0
@@ -109,21 +103,16 @@ class SalesWindow(QWidget):
             stock, precio_unit = inv
             precio = precio_unit
             if cantidad > stock:
-                QMessageBox.warning(self, "Error", f"No hay suficiente stock ({stock} disponible)")
+                QMessageBox.warning(self, "Error", f"No hay suficiente stock. Disponible: {stock}")
                 conn.close()
                 return
-            # Descontar inventario
+            # Descontar inventario automáticamente
             new_stock = stock - cantidad
             c.execute("UPDATE inventario SET cantidad = ? WHERE producto = ?", (new_stock, producto))
         else:
-            # Producto manual: pide precio
-            text, ok = QInputDialog.getDouble(self, "Precio", f"Ingrese precio para '{producto}'", 0.0, 0.01)
-            if not ok or text <= 0:
-                QMessageBox.warning(self, "Error", "Precio inválido, venta cancelada")
-                conn.close()
-                return
-            precio = text
-            c.execute("INSERT INTO inventario (producto, cantidad, precio) VALUES (?, ?, ?)", (producto, 0, precio))
+            QMessageBox.warning(self, "Error", "Producto no encontrado en inventario")
+            conn.close()
+            return
 
         total = cantidad * precio
         fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -132,11 +121,10 @@ class SalesWindow(QWidget):
         conn.commit()
         conn.close()
 
-        self.load_products_safe()
+        self.load_products_safe()  # Recarga productos después de vender
         self.load_sales_safe()
         self.qty_input.clear()
 
-    # --- Cargar ventas a la tabla ---
     def load_sales_safe(self):
         try:
             self.load_sales()
@@ -155,12 +143,11 @@ class SalesWindow(QWidget):
         for i, row in enumerate(rows):
             for j, val in enumerate(row):
                 item = QTableWidgetItem(str(val))
-                if j in [1,2]:  # alinear cantidad y total a la derecha
+                if j in [1,2]:
                     item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 self.table.setItem(i, j, item)
         self.table.resizeColumnsToContents()
 
-    # --- Exportar ventas a Excel ---
     def export_sales_safe(self):
         try:
             self.export_sales()
