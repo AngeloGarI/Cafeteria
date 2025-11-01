@@ -24,7 +24,7 @@ class LoginWindow(QWidget):
         self.button_login.clicked.connect(self.check_login)
 
         self.button_forgot = QPushButton("¿Olvidaste tu contraseña?")
-        self.button_forgot.clicked.connect(self.forgot_password)  # Este método faltaba
+        self.button_forgot.clicked.connect(self.forgot_password)
 
         layout.addWidget(self.label_user)
         layout.addWidget(self.input_user)
@@ -74,7 +74,6 @@ class LoginWindow(QWidget):
         self.main.show()
         self.close()
 
-    # Método faltante: forgot_password
     def forgot_password(self):
         dialog = ForgotPasswordDialog()
         dialog.exec()
