@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import (
     QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout,
-    QHBoxLayout, QTableWidget, QTableWidgetItem, QMessageBox, QHeaderView
+    QHBoxLayout, QTableWidget, QTableWidgetItem, QMessageBox, QHeaderView, QDateEdit
 )
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QDate
 import sqlite3
 import os
 import traceback
@@ -11,11 +11,10 @@ class InventoryWindow(QWidget):
     def __init__(self, rol="admin"):
         super().__init__()
         self.setWindowTitle("Gestión de Inventario - Cafetería")
-        self.resize(800, 500)
+        self.resize(900, 500)
         self.rol = rol
         self.setup_ui()
         self.load_data_safe()
-        self.check_low_stock_once()
 
     def setup_ui(self):
         layout = QVBoxLayout()
@@ -32,10 +31,15 @@ class InventoryWindow(QWidget):
 
         self.name_input = QLineEdit()
         self.name_input.setPlaceholderText("Nombre del producto")
+        self.category_input = QLineEdit()
+        self.category_input.setPlaceholderText("Categoría (ej. Bebidas)")
         self.qty_input = QLineEdit()
         self.qty_input.setPlaceholderText("Cantidad")
         self.price_input = QLineEdit()
         self.price_input.setPlaceholderText("Precio (Q)")
+        self.expiry_input = QDateEdit()
+        self.expiry_input.setCalendarPopup(True)
+        self.expiry_input.setDate(QDate.currentDate())
 
         self.add_btn = QPushButton("Agregar")
         self.add_btn.clicked.connect(self.add_item_safe)
@@ -43,22 +47,24 @@ class InventoryWindow(QWidget):
         self.update_btn.clicked.connect(self.update_item_safe)
         self.delete_btn = QPushButton("Eliminar")
         self.delete_btn.clicked.connect(self.delete_item_safe)
-        self.refresh_btn = QPushButton("Refrescar")  # Nuevo botón para recarga manual
+        self.refresh_btn = QPushButton("Refrescar")
         self.refresh_btn.clicked.connect(self.refresh_data)
 
         form_layout.addWidget(QLabel("Buscar:"))
         form_layout.addWidget(self.search_input)
         form_layout.addWidget(self.name_input)
+        form_layout.addWidget(self.category_input)
         form_layout.addWidget(self.qty_input)
         form_layout.addWidget(self.price_input)
+        form_layout.addWidget(self.expiry_input)
         btn_layout.addWidget(self.add_btn)
         btn_layout.addWidget(self.update_btn)
         btn_layout.addWidget(self.delete_btn)
-        btn_layout.addWidget(self.refresh_btn)  # Agregado
+        btn_layout.addWidget(self.refresh_btn)
 
         self.table = QTableWidget()
-        self.table.setColumnCount(3)
-        self.table.setHorizontalHeaderLabels(["Producto", "Cantidad", "Precio (Q)"])
+        self.table.setColumnCount(5)
+        self.table.setHorizontalHeaderLabels(["Producto", "Categoría", "Cantidad", "Precio (Q)", "Fecha Vencimiento"])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.table.setAlternatingRowColors(True)
         self.table.setSortingEnabled(True)
@@ -83,15 +89,15 @@ class InventoryWindow(QWidget):
     def load_data(self):
         conn = sqlite3.connect(self.get_db_path())
         c = conn.cursor()
-        c.execute("SELECT producto, cantidad, precio FROM inventario ORDER BY producto ASC")
+        c.execute("SELECT producto, categoria, cantidad, precio, fecha_vencimiento FROM inventario ORDER BY producto ASC")
         rows = c.fetchall()
         conn.close()
 
         self.table.setRowCount(len(rows))
         for i, row in enumerate(rows):
             for j, val in enumerate(row):
-                item = QTableWidgetItem(str(val))
-                if j in [1, 2]:
+                item = QTableWidgetItem(str(val) if val else "")
+                if j in [2, 3]:
                     item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 self.table.setItem(i, j, item)
 
@@ -115,11 +121,13 @@ class InventoryWindow(QWidget):
             return
 
         nombre = self.name_input.text().strip()
+        categoria = self.category_input.text().strip()
         cantidad = self.qty_input.text().strip()
         precio = self.price_input.text().strip()
+        fecha_vencimiento = self.expiry_input.date().toString("yyyy-MM-dd")
 
         if not nombre or not cantidad or not precio:
-            QMessageBox.warning(self, "Error", "Completa todos los campos")
+            QMessageBox.warning(self, "Error", "Completa nombre, cantidad y precio")
             return
 
         try:
@@ -133,14 +141,15 @@ class InventoryWindow(QWidget):
 
         conn = sqlite3.connect(self.get_db_path())
         c = conn.cursor()
-        c.execute("SELECT COUNT(*) FROM inventario WHERE producto = ?", (nombre,))
+        # Corregido: Usa COLLATE NOCASE para comparación insensible a mayúsculas
+        c.execute("SELECT COUNT(*) FROM inventario WHERE producto COLLATE NOCASE = ?", (nombre,))
         if c.fetchone()[0] > 0:
-            QMessageBox.warning(self, "Duplicado", f"El producto '{nombre}' ya existe en el inventario.")
+            QMessageBox.warning(self, "Duplicado", f"El producto '{nombre}' ya existe en el inventario (ignorando mayúsculas).")
             conn.close()
             return
 
-        c.execute("INSERT INTO inventario (producto, cantidad, precio) VALUES (?, ?, ?)",
-                  (nombre, cantidad, precio))
+        c.execute("INSERT INTO inventario (producto, categoria, cantidad, precio, fecha_vencimiento) VALUES (?, ?, ?, ?, ?)",
+                  (nombre, categoria or None, cantidad, precio, fecha_vencimiento))
         conn.commit()
         conn.close()
 
@@ -164,11 +173,13 @@ class InventoryWindow(QWidget):
             QMessageBox.warning(self, "Error", "Selecciona un producto para actualizar")
             return
 
+        nueva_categoria = self.category_input.text().strip()
         nueva_cantidad = self.qty_input.text().strip()
         nuevo_precio = self.price_input.text().strip()
+        nueva_fecha = self.expiry_input.date().toString("yyyy-MM-dd")
 
         if not nueva_cantidad or not nuevo_precio:
-            QMessageBox.warning(self, "Error", "Ingresa cantidad y precio en los campos")
+            QMessageBox.warning(self, "Error", "Ingresa cantidad y precio")
             return
 
         try:
@@ -183,8 +194,8 @@ class InventoryWindow(QWidget):
         nombre = self.table.item(row, 0).text()
         conn = sqlite3.connect(self.get_db_path())
         c = conn.cursor()
-        c.execute("UPDATE inventario SET cantidad = ?, precio = ? WHERE producto = ?",
-                  (nueva_cantidad, nuevo_precio, nombre))
+        c.execute("UPDATE inventario SET categoria = ?, cantidad = ?, precio = ?, fecha_vencimiento = ? WHERE producto = ?",
+                  (nueva_categoria or None, nueva_cantidad, nuevo_precio, nueva_fecha, nombre))
         conn.commit()
         conn.close()
 
@@ -230,19 +241,10 @@ class InventoryWindow(QWidget):
 
     def clear_inputs(self):
         self.name_input.clear()
+        self.category_input.clear()
         self.qty_input.clear()
         self.price_input.clear()
-
-    def check_low_stock_once(self):
-        conn = sqlite3.connect(self.get_db_path())
-        c = conn.cursor()
-        c.execute("SELECT producto, cantidad FROM inventario WHERE cantidad <= 5")
-        low_stock = c.fetchall()
-        conn.close()
-
-        if low_stock:
-            mensaje = "\n".join([f"• {p} (stock: {q})" for p, q in low_stock])
-            QMessageBox.warning(self, "Stock bajo", f"Productos con poco stock:\n{mensaje}")
+        self.expiry_input.setDate(QDate.currentDate())
 
     def refresh_data(self):
         self.load_data_safe()
