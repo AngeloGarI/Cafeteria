@@ -28,7 +28,7 @@ class ReportsWindow(QWidget):
         title_layout.addStretch()
 
         image_label = QLabel()
-        image_pixmap = QPixmap("ui/assets/Reportes.jpg").scaled(80, 80, Qt.AspectRatioMode.KeepAspectRatio)
+        image_pixmap = QPixmap("ui/assets/Logo.png").scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
         image_label.setPixmap(image_pixmap)
         title_layout.addStretch()
         title_layout.addWidget(image_label)
@@ -116,13 +116,6 @@ class ReportsWindow(QWidget):
         table_container = QWidget()
         table_layout = QVBoxLayout(table_container)
         table_layout.setContentsMargins(0, 0, 0, 0)
-
-        watermark_label = QLabel(table_container)
-        watermark_pixmap = QPixmap("ui/assets/Logo.jpg").scaled(150, 150, Qt.AspectRatioMode.KeepAspectRatio)  # Más pequeña
-        watermark_label.setPixmap(watermark_pixmap)
-        watermark_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        watermark_label.setStyleSheet("opacity: 0.05;")
-        watermark_label.lower()
 
         self.table_widget = QTableWidget(table_container)
         self.table_widget.setStyleSheet("""

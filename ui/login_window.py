@@ -23,7 +23,7 @@ class LoginWindow(QWidget):
         layout.addWidget(login_title)
 
         logo_label = QLabel()
-        logo_pixmap = QPixmap("ui/assets/Logo.jpg").scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
+        logo_pixmap = QPixmap("ui/assets/Login.jpg").scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
         logo_label.setPixmap(logo_pixmap)
         logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(logo_label)
