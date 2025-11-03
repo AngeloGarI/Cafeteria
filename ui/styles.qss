@@ -1,57 +1,57 @@
-/* Fondo principal con gradiente sutil */
+/* Fondo beige claro cálido */
 QMainWindow, QWidget {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #F5F0E6, stop:1 #E8D5B7);
-    font-family: 'Segoe UI', Arial, sans-serif; /* Fuente moderna */
-    font-size: 14px; /* Más grande para accesibilidad */
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #f1e3d8, stop:1 #e1b495);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 14px;
 }
 
-/* Botones con sombras y gradientes */
+/* Botones rosa fuerte con hover rosa claro */
 QPushButton {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #8B5E3C, stop:1 #6B4226);
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #cf2762, stop:1 #b02452);
     color: white;
     border: none;
     border-radius: 8px;
     padding: 10px 15px;
     font-weight: bold;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* Sombra para profundidad */
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
 }
 QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #A97455, stop:1 #8B5E3C);
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #f4a3b2, stop:1 #e890a0);
     box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
 }
 QPushButton:pressed {
-    background: #6B4226;
+    background: #b02452;
     box-shadow: inset 2px 2px 5px rgba(0,0,0,0.4);
 }
 
-/* Campos de texto con foco */
+/* Campos con borde beige medio y foco rosa */
 QLineEdit, QComboBox {
     background-color: #FFFFFF;
-    border: 2px solid #C8A97E;
+    border: 2px solid #e1b495;
     border-radius: 6px;
     padding: 8px;
     color: #000000;
 }
 QLineEdit:focus, QComboBox:focus {
-    border-color: #8B5E3C; /* Resalta al enfocar */
+    border-color: #cf2762;
 }
 
-/* Etiquetas con mejor legibilidad */
+/* Etiquetas negras para contraste */
 QLabel {
     color: #000000;
     font-size: 14px;
 }
 
-/* Tablas con sorting y mejor apariencia */
+/* Tablas con headers naranja para energía */
 QTableWidget {
     background-color: #FFFFFF;
-    alternate-background-color: #F5E9D7;
-    gridline-color: #C8A97E;
+    alternate-background-color: #f4a3b2;
+    gridline-color: #e1b495;
     border-radius: 8px;
-    selection-background-color: #A97455;
+    selection-background-color: #cf2762;
 }
 QHeaderView::section {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #8B5E3C, stop:1 #6B4226);
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #d98046, stop:1 #c76e3a);
     color: white;
     padding: 8px;
     border: none;
@@ -62,15 +62,15 @@ QTableWidget::item {
     padding: 5px;
 }
 
-/* Tabs con íconos y efectos */
-QTabWidget::pane { border: 2px solid #C8A97E; background: #F5F0E6; border-radius: 10px; }
-QTabBar::tab { background: #8B5E3C; color: white; padding: 12px; border-radius: 8px; margin: 2px; min-width: 100px; }
-QTabBar::tab:selected { background: #A97455; font-weight: bold; }
-QTabBar::tab:hover { background: #6B4226; }
+/* Tabs rosa con hover naranja */
+QTabWidget::pane { border: 2px solid #e1b495; background: #f1e3d8; border-radius: 10px; }
+QTabBar::tab { background: #cf2762; color: white; padding: 12px; border-radius: 8px; margin: 2px; min-width: 100px; }
+QTabBar::tab:selected { background: #b02452; font-weight: bold; }
+QTabBar::tab:hover { background: #d98046; }
 
-/* Diálogos y mensajes con estilo */
+/* Diálogos beige claro con borde rosa */
 QDialog, QMessageBox {
-    background: #F5F0E6;
+    background: #f1e3d8;
     border-radius: 10px;
     box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
 }
@@ -78,17 +78,17 @@ QDialog QLabel, QMessageBox QLabel {
     color: #000000;
 }
 
-/* Barra de menú */
-QMenuBar { background: #8B5E3C; color: white; }
-QMenuBar::item { background: transparent; padding: 5px 10px; }
-QMenuBar::item:selected { background: #A97455; }
+/* Barra de menú rosa con letras blancas para contraste */
+QMenuBar { background: #cf2762; color: white; }
+QMenuBar::item { background: transparent; padding: 5px 10px; color: white; }
+QMenuBar::item:selected { background: #d98046; }
 
-/* Animaciones para transiciones */
+/* Animaciones */
 QWidget {
-    transition: opacity 0.5s ease-in-out; /* Soporte para fade */
+    transition: opacity 0.5s ease-in-out;
 }
 
-/* Íconos en botones/tablas */
+/* Íconos */
 QPushButton {
-    qproperty-iconSize: 20px; /* Tamaño de íconos */
+    qproperty-iconSize: 20px;
 }
