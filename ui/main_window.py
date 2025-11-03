@@ -33,9 +33,9 @@ class MainWindow(QMainWindow):
         self.sales_tab = SalesWindow()
         self.reports_tab = ReportsWindow()
 
-        self.tabs.addTab(self.inventory_tab, QIcon("icons/inventory.png"), "Inventario")
-        self.tabs.addTab(self.sales_tab, QIcon("icons/sales.png"), "Ventas")
-        self.tabs.addTab(self.reports_tab, QIcon("icons/reports.png"), "Reportes")
+        self.tabs.addTab(self.inventory_tab, QIcon("ui/assets/Inventario.jpg"), "Inventario")
+        self.tabs.addTab(self.sales_tab, QIcon("ui/assets/Ventas.jpg"), "Ventas")
+        self.tabs.addTab(self.reports_tab, QIcon("ui/assets/Reportes.jpg"), "Reportes")
 
         self.tabs.currentChanged.connect(self.on_tab_changed)
 
@@ -44,7 +44,7 @@ class MainWindow(QMainWindow):
             access_label = QLabel("Acceso: Solo Ventas y Reportes")
             access_label.setStyleSheet("font-size: 14px; color: #3E2C1C; font-weight: bold; margin: 10px;")
             access_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            self.sales_tab.layout().insertWidget(0, access_label)  # Agrega arriba en Ventas
+            self.sales_tab.layout().insertWidget(0, access_label)
 
         self.setCentralWidget(self.tabs)
 
@@ -59,7 +59,7 @@ class MainWindow(QMainWindow):
         file_menu = menubar.addMenu("Archivo")
         view_menu = menubar.addMenu("Vista")
 
-        exit_action = QAction(QIcon("icons/exit.png"), "Salir", self)
+        exit_action = QAction(QIcon("ui/assets/Salir.jpg"), "Salir", self)
         exit_action.triggered.connect(self.close)
         file_menu.addAction(exit_action)
 
@@ -68,9 +68,36 @@ class MainWindow(QMainWindow):
             create_user_action.triggered.connect(self.create_user)
             file_menu.addAction(create_user_action)
 
+            reset_data_action = QAction("Restablecer Datos", self)
+            reset_data_action.triggered.connect(self.reset_data)
+            file_menu.addAction(reset_data_action)
+
         theme_action = QAction("Cambiar Tema", self)
         theme_action.triggered.connect(lambda: QMessageBox.information(self, "Tema", "Función próximamente"))
         view_menu.addAction(theme_action)
+
+    def reset_data(self):
+        reply1 = QMessageBox.question(self, "Confirmar Restablecimiento",
+                                      "¿Estás seguro de vaciar inventario y ventas? Esto eliminará todos los datos.",
+                                      QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        if reply1 == QMessageBox.StandardButton.Yes:
+            reply2 = QMessageBox.question(self, "Última Confirmación",
+                                          "Esto no se puede deshacer. ¿Continuar?",
+                                          QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+            if reply2 == QMessageBox.StandardButton.Yes:
+                try:
+                    conn = sqlite3.connect("cafeteria.db")
+                    c = conn.cursor()
+                    c.execute("DELETE FROM inventario")
+                    c.execute("DELETE FROM ventas")
+                    conn.commit()
+                    conn.close()
+                    QMessageBox.information(self, "Restablecido", "Inventario y ventas han sido vaciados.")
+                    self.inventory_tab.load_data_safe()
+                    self.sales_tab.load_sales_safe()
+                    self.reports_tab.load_data_safe("inventario")
+                except Exception as e:
+                    QMessageBox.critical(self, "Error", f"No se pudo restablecer:\n{e}")
 
     def animate_tabs(self):
         if self.animation is None:
