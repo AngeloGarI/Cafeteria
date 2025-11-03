@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox,
     QComboBox, QTableWidget, QTableWidgetItem, QHeaderView, QHBoxLayout
 )
+from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 from datetime import datetime, timedelta
 
@@ -18,10 +19,20 @@ class ReportsWindow(QWidget):
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
+        title_layout = QHBoxLayout()
+        title_layout.addStretch()
         title = QLabel("📊 Generador de Reportes")
-        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title.setStyleSheet("font-size: 18px; font-weight: bold; margin-bottom: 10px;")
-        layout.addWidget(title)
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title_layout.addWidget(title)
+        title_layout.addStretch()
+
+        image_label = QLabel()
+        image_pixmap = QPixmap("ui/assets/Reportes.jpg").scaled(80, 80, Qt.AspectRatioMode.KeepAspectRatio)
+        image_label.setPixmap(image_pixmap)
+        title_layout.addStretch()
+        title_layout.addWidget(image_label)
+        layout.addLayout(title_layout)
 
         controls_layout = QHBoxLayout()
         controls_layout.setSpacing(10)
@@ -72,7 +83,6 @@ class ReportsWindow(QWidget):
         self.export_button.clicked.connect(self.export_report)
         controls_layout.addWidget(self.export_button)
 
-        # Botón para advertencias de vencimiento
         self.warning_btn = QPushButton("Ver Advertencias de Vencimiento")
         self.warning_btn.setStyleSheet("""
                     QPushButton {
@@ -87,7 +97,6 @@ class ReportsWindow(QWidget):
         self.warning_btn.clicked.connect(self.show_expiry_warnings)
         controls_layout.addWidget(self.warning_btn)
 
-        # Nuevo botón para stock bajo
         self.low_stock_btn = QPushButton("Ver Stock Bajo")
         self.low_stock_btn.setStyleSheet("""
                     QPushButton {
@@ -104,7 +113,18 @@ class ReportsWindow(QWidget):
 
         layout.addLayout(controls_layout)
 
-        self.table_widget = QTableWidget()
+        table_container = QWidget()
+        table_layout = QVBoxLayout(table_container)
+        table_layout.setContentsMargins(0, 0, 0, 0)
+
+        watermark_label = QLabel(table_container)
+        watermark_pixmap = QPixmap("ui/assets/Logo.jpg").scaled(150, 150, Qt.AspectRatioMode.KeepAspectRatio)  # Más pequeña
+        watermark_label.setPixmap(watermark_pixmap)
+        watermark_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        watermark_label.setStyleSheet("opacity: 0.05;")
+        watermark_label.lower()
+
+        self.table_widget = QTableWidget(table_container)
         self.table_widget.setStyleSheet("""
                     QTableWidget {
                         background-color: #ffffff;

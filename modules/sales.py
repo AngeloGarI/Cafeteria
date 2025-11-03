@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import (
     QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout,
     QComboBox, QTableWidget, QTableWidgetItem, QMessageBox, QFileDialog
 )
+from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 import sqlite3
 import os
@@ -20,6 +21,20 @@ class SalesWindow(QWidget):
 
     def setup_ui(self):
         layout = QVBoxLayout()
+        title_layout = QHBoxLayout()
+        title_layout.addStretch()
+        title = QLabel("Ventas")
+        title.setStyleSheet("font-size: 20px; font-weight: bold;")
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title_layout.addWidget(title)
+        title_layout.addStretch()
+
+        image_label = QLabel()
+        image_pixmap = QPixmap("ui/assets/Ventas.jpg").scaled(80, 80, Qt.AspectRatioMode.KeepAspectRatio)
+        image_label.setPixmap(image_pixmap)
+        title_layout.addStretch()
+        title_layout.addWidget(image_label)
+        layout.addLayout(title_layout)
 
         form_layout = QHBoxLayout()
         self.product_combo = QComboBox()
@@ -38,14 +53,28 @@ class SalesWindow(QWidget):
         self.export_btn = QPushButton("Exportar Ventas a Excel")
         self.export_btn.clicked.connect(self.export_sales_safe)
 
-        self.table = QTableWidget()
+        table_container = QWidget()
+        table_layout = QVBoxLayout(table_container)
+        table_layout.setContentsMargins(0, 0, 0, 0)
+
+        watermark_label = QLabel(table_container)
+        watermark_pixmap = QPixmap("ui/assets/Logo.jpg").scaled(150, 150, Qt.AspectRatioMode.KeepAspectRatio)  # Más pequeña
+        watermark_label.setPixmap(watermark_pixmap)
+        watermark_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        watermark_label.setStyleSheet("opacity: 0.05;")
+        watermark_label.lower()
+
+        self.table = QTableWidget(table_container)
         self.table.setColumnCount(4)
         self.table.setHorizontalHeaderLabels(["Producto", "Cantidad", "Total", "Fecha"])
         self.table.setAlternatingRowColors(True)
 
+        table_layout.addWidget(self.table)
+        table_layout.addWidget(watermark_label)
+
         layout.addLayout(form_layout)
         layout.addWidget(self.export_btn)
-        layout.addWidget(self.table)
+        layout.addWidget(table_container)
         self.setLayout(layout)
 
     def get_db_path(self):
@@ -106,7 +135,6 @@ class SalesWindow(QWidget):
                 QMessageBox.warning(self, "Error", f"No hay suficiente stock. Disponible: {stock}")
                 conn.close()
                 return
-            # Descontar inventario automáticamente
             new_stock = stock - cantidad
             c.execute("UPDATE inventario SET cantidad = ? WHERE producto = ?", (new_stock, producto))
         else:
@@ -121,7 +149,7 @@ class SalesWindow(QWidget):
         conn.commit()
         conn.close()
 
-        self.load_products_safe()  # Recarga productos después de vender
+        self.load_products_safe()
         self.load_sales_safe()
         self.qty_input.clear()
 

@@ -5,46 +5,60 @@ import sqlite3
 import hashlib
 from Cafeteria.ui.main_window import MainWindow
 
-
 class LoginWindow(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Login - Cafeteria")
-        self.resize(500, 400)
+        self.setWindowTitle("Login - Cafetería")
+        self.resize(500, 450)
+        self.setStyleSheet("background-color: #FFFFFF;")  # Fondo blanco
         self.setup_ui()
 
     def setup_ui(self):
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+        login_title = QLabel("LOGIN")
+        login_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        login_title.setStyleSheet("font-size: 24px; font-weight: bold; color: #8B5E3C; margin-bottom: 10px;")
+        layout.addWidget(login_title)
+
         logo_label = QLabel()
-        logo_pixmap = QPixmap("icons/logo.png").scaled(150, 150, Qt.AspectRatioMode.KeepAspectRatio)
+        logo_pixmap = QPixmap("ui/assets/Logo.jpg").scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
         logo_label.setPixmap(logo_pixmap)
         logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(logo_label)
 
-        self.label_user = QLabel("Usuario:")
-        self.label_user.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.input_user = QLineEdit()
-        self.input_user.setPlaceholderText("Ingresa tu usuario")
-        self.label_pass = QLabel("Contraseña:")
-        self.label_pass.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.input_user.setPlaceholderText("Nombre de usuario")
+        self.input_user.setStyleSheet("padding: 10px; font-size: 14px; border: 1px solid #BDBDBD; border-radius: 5px;")
+        layout.addWidget(self.input_user)
+
         self.input_pass = QLineEdit()
+        self.input_pass.setPlaceholderText("Contraseña")
         self.input_pass.setEchoMode(QLineEdit.EchoMode.Password)
-        self.input_pass.setPlaceholderText("Ingresa tu contraseña")
+        self.input_pass.setStyleSheet("padding: 10px; font-size: 14px; border: 1px solid #BDBDBD; border-radius: 5px;")
+
+        self.input_pass.addAction(QIcon("ui/assets/lock.png"), QLineEdit.ActionPosition.TrailingPosition)
+        layout.addWidget(self.input_pass)
+
         self.button_login = QPushButton("Ingresar")
-        self.button_login.setIcon(QIcon("icons/login.png"))  # Ícono en botón
+        self.button_login.setStyleSheet("""
+            background-color: #8B5E3C;  /* Café */
+            color: white;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+        """)
         self.button_login.clicked.connect(self.check_login)
+        layout.addWidget(self.button_login)
 
         self.button_forgot = QPushButton("¿Olvidaste tu contraseña?")
+        self.button_forgot.setStyleSheet("color: #2196F3; border: none; text-decoration: underline;")
         self.button_forgot.clicked.connect(self.forgot_password)
-
-        layout.addWidget(self.label_user)
-        layout.addWidget(self.input_user)
-        layout.addWidget(self.label_pass)
-        layout.addWidget(self.input_pass)
-        layout.addWidget(self.button_login)
         layout.addWidget(self.button_forgot)
+
         self.setLayout(layout)
 
     def check_login(self):
