@@ -28,7 +28,7 @@ class ReportsWindow(QWidget):
         title_layout.addStretch()
 
         image_label = QLabel()
-        image_pixmap = QPixmap("ui/assets/Logo.png").scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
+        image_pixmap = QPixmap("ui/assets/Logo.png").scaled(100, 100, Qt.AspectRatioMode.KeepAspectRatio)
         image_label.setPixmap(image_pixmap)
         title_layout.addStretch()
         title_layout.addWidget(image_label)
@@ -51,10 +51,10 @@ class ReportsWindow(QWidget):
                     }
                     QComboBox:hover { border-color: #795548; }
                 """)
+        self.table_selector.setToolTip("Selecciona la tabla para generar el reporte")
         controls_layout.addWidget(QLabel("Seleccione reporte:"))
         controls_layout.addWidget(self.table_selector)
 
-        # Botón actualizar
         self.refresh_button = QPushButton("🔄 Actualizar datos")
         self.refresh_button.setStyleSheet("""
                     QPushButton {
@@ -67,6 +67,7 @@ class ReportsWindow(QWidget):
                     QPushButton:hover { background-color: #8d6e63; }
                 """)
         self.refresh_button.clicked.connect(self.refresh_data)
+        self.refresh_button.setToolTip("Recarga los datos de la tabla seleccionada")
         controls_layout.addWidget(self.refresh_button)
 
         self.export_button = QPushButton("📤 Exportar a Excel")
@@ -81,6 +82,7 @@ class ReportsWindow(QWidget):
                     QPushButton:hover { background-color: #5d4037; }
                 """)
         self.export_button.clicked.connect(self.export_report)
+        self.export_button.setToolTip("Exporta el reporte actual a un archivo Excel")
         controls_layout.addWidget(self.export_button)
 
         self.warning_btn = QPushButton("Ver Advertencias de Vencimiento")
@@ -95,6 +97,7 @@ class ReportsWindow(QWidget):
                     QPushButton:hover { background-color: #F57C00; }
                 """)
         self.warning_btn.clicked.connect(self.show_expiry_warnings)
+        self.warning_btn.setToolTip("Muestra productos próximos a vencer")
         controls_layout.addWidget(self.warning_btn)
 
         self.low_stock_btn = QPushButton("Ver Stock Bajo")
@@ -109,6 +112,7 @@ class ReportsWindow(QWidget):
                     QPushButton:hover { background-color: #D32F2F; }
                 """)
         self.low_stock_btn.clicked.connect(self.show_low_stock)
+        self.low_stock_btn.setToolTip("Muestra productos con stock bajo (<=5)")
         controls_layout.addWidget(self.low_stock_btn)
 
         layout.addLayout(controls_layout)
@@ -131,6 +135,7 @@ class ReportsWindow(QWidget):
                         padding: 4px;
                     }
                 """)
+
         layout.addWidget(self.table_widget)
 
         self.status_label = QLabel()
