@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (
     QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout,
-    QHBoxLayout, QTableWidget, QTableWidgetItem, QMessageBox, QHeaderView, QDateEdit
+    QHBoxLayout, QTableWidget, QTableWidgetItem, QMessageBox, QHeaderView, QDateEdit, QComboBox
 )
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt, QDate
@@ -29,7 +29,7 @@ class InventoryWindow(QWidget):
         title_layout.addStretch()
 
         image_label = QLabel()
-        image_pixmap = QPixmap("ui/assets/Logo.png").scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
+        image_pixmap = QPixmap("ui/assets/Logo.png").scaled(100, 100, Qt.AspectRatioMode.KeepAspectRatio)
         image_label.setPixmap(image_pixmap)
         title_layout.addStretch()
         title_layout.addWidget(image_label)
@@ -41,30 +41,49 @@ class InventoryWindow(QWidget):
         self.search_input = QLineEdit()
         self.search_input.setPlaceholderText("Buscar producto...")
         self.search_input.textChanged.connect(self.filter_table)
+        self.search_input.setToolTip("Escribe para filtrar productos por nombre")
+
+        self.filter_combo = QComboBox()
+        self.filter_combo.addItems(["Todas", "Bebida", "Comida", "Otro"])
+        self.filter_combo.currentTextChanged.connect(self.filter_table)
+        self.filter_combo.setToolTip("Filtra productos por categoría")
 
         self.name_input = QLineEdit()
         self.name_input.setPlaceholderText("Nombre del producto")
+        self.name_input.setToolTip("Ingresa el nombre del producto (máx. 50 caracteres)")
         self.category_input = QLineEdit()
         self.category_input.setPlaceholderText("Categoría (ej. Bebidas)")
+        self.category_input.setToolTip("Ingresa la categoría del producto")
         self.qty_input = QLineEdit()
         self.qty_input.setPlaceholderText("Cantidad")
+        self.qty_input.setToolTip("Ingresa la cantidad (número positivo)")
         self.price_input = QLineEdit()
         self.price_input.setPlaceholderText("Precio (Q)")
+        self.price_input.setToolTip("Ingresa el precio en quetzales (número positivo)")
         self.expiry_input = QDateEdit()
         self.expiry_input.setCalendarPopup(True)
         self.expiry_input.setDate(QDate.currentDate())
+        self.expiry_input.setToolTip("Selecciona la fecha de vencimiento")
 
         self.add_btn = QPushButton("Agregar")
         self.add_btn.clicked.connect(self.add_item_safe)
+        self.add_btn.setToolTip("Agrega un nuevo producto al inventario")
         self.update_btn = QPushButton("Actualizar")
         self.update_btn.clicked.connect(self.update_item_safe)
+        self.update_btn.setToolTip("Actualiza el producto seleccionado")
         self.delete_btn = QPushButton("Eliminar")
         self.delete_btn.clicked.connect(self.delete_item_safe)
+        self.delete_btn.setToolTip("Elimina el producto seleccionado")
         self.refresh_btn = QPushButton("Refrescar")
         self.refresh_btn.clicked.connect(self.refresh_data)
+        self.refresh_btn.setToolTip("Recarga los datos del inventario")
+        self.import_btn = QPushButton("Importar desde Excel")
+        self.import_btn.clicked.connect(self.import_from_excel)
 
         form_layout.addWidget(QLabel("Buscar:"))
         form_layout.addWidget(self.search_input)
+        form_layout.addWidget(QLabel("Categoría:"))
+        form_layout.addWidget(self.filter_combo)
         form_layout.addWidget(self.name_input)
         form_layout.addWidget(self.category_input)
         form_layout.addWidget(self.qty_input)
@@ -74,6 +93,7 @@ class InventoryWindow(QWidget):
         btn_layout.addWidget(self.update_btn)
         btn_layout.addWidget(self.delete_btn)
         btn_layout.addWidget(self.refresh_btn)
+        btn_layout.addWidget(self.import_btn)
 
         table_container = QWidget()
         table_layout = QVBoxLayout(table_container)
@@ -121,10 +141,14 @@ class InventoryWindow(QWidget):
 
     def filter_table(self):
         search_text = self.search_input.text().lower()
+        category_filter = self.filter_combo.currentText().lower()
         for row in range(self.table.rowCount()):
             item = self.table.item(row, 0)
-            if item:
-                self.table.setRowHidden(row, search_text not in item.text().lower())
+            category_item = self.table.item(row, 1)
+            if item and category_item:
+                matches_search = search_text in item.text().lower()
+                matches_category = category_filter == "todas" or category_filter == category_item.text().lower()
+                self.table.setRowHidden(row, not (matches_search and matches_category))
 
     def add_item_safe(self):
         try:
@@ -139,13 +163,16 @@ class InventoryWindow(QWidget):
             return
 
         nombre = self.name_input.text().strip()
-        categoria = self.category_input.text().strip()
+        categoria = self.category_input.text().strip().title()
         cantidad = self.qty_input.text().strip()
         precio = self.price_input.text().strip()
         fecha_vencimiento = self.expiry_input.date().toString("yyyy-MM-dd")
 
         if not nombre or not cantidad or not precio:
             QMessageBox.warning(self, "Error", "Completa nombre, cantidad y precio")
+            return
+        if len(nombre) > 50 or not nombre.replace(" ", "").isalnum():
+            QMessageBox.warning(self, "Error", "Nombre debe tener máximo 50 caracteres y solo letras, números o espacios.")
             return
 
         try:
@@ -190,13 +217,16 @@ class InventoryWindow(QWidget):
             QMessageBox.warning(self, "Error", "Selecciona un producto para actualizar")
             return
 
-        nueva_categoria = self.category_input.text().strip()
+        nueva_categoria = self.category_input.text().strip().title()
         nueva_cantidad = self.qty_input.text().strip()
         nuevo_precio = self.price_input.text().strip()
         nueva_fecha = self.expiry_input.date().toString("yyyy-MM-dd")
 
         if not nueva_cantidad or not nuevo_precio:
             QMessageBox.warning(self, "Error", "Ingresa cantidad y precio")
+            return
+        if len(nueva_categoria) > 50 or not nueva_categoria.replace(" ", "").isalnum():
+            QMessageBox.warning(self, "Error", "Categoría debe tener máximo 50 caracteres y solo letras, números o espacios.")
             return
 
         try:
@@ -266,3 +296,28 @@ class InventoryWindow(QWidget):
     def refresh_data(self):
         self.load_data_safe()
         QMessageBox.information(self, "Refrescado", "Datos del inventario actualizados.")
+
+    def import_from_excel(self):
+        from PyQt6.QtWidgets import QFileDialog
+        import pandas as pd
+        path, _ = QFileDialog.getOpenFileName(self, "Seleccionar Excel", "", "Excel Files (*.xlsx)")
+        if path:
+            try:
+                df = pd.read_excel(path)
+                conn = sqlite3.connect(self.get_db_path())
+                c = conn.cursor()
+                for _, row in df.iterrows():
+                    producto = str(row.get("Producto", "")).strip()
+                    categoria = str(row.get("Categoría", "")).strip().title()
+                    cantidad = int(row.get("Cantidad", 0))
+                    precio = float(row.get("Precio", 0.0))
+                    # Validaciones
+                    if producto and cantidad > 0 and precio > 0:
+                        c.execute("INSERT OR IGNORE INTO inventario (producto, categoria, cantidad, precio) VALUES (?, ?, ?, ?)",
+                                  (producto, categoria, cantidad, precio))
+                conn.commit()
+                conn.close()
+                self.load_data_safe()
+                QMessageBox.information(self, "Importado", "Datos importados correctamente.")
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"Error al importar:\n{e}")
