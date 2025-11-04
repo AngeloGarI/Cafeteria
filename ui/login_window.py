@@ -10,7 +10,9 @@ class LoginWindow(QWidget):
         super().__init__()
         self.setWindowTitle("Login - Cafetería")
         self.resize(500, 450)
-        self.setStyleSheet("background-color: #FFFFFF;")  # Fondo blanco
+        self.setStyleSheet("background-color: #FFFFFF;")
+        self.attempts = 0
+        self.max_attempts = 3
         self.setup_ui()
 
     def setup_ui(self):
@@ -31,14 +33,15 @@ class LoginWindow(QWidget):
         self.input_user = QLineEdit()
         self.input_user.setPlaceholderText("Nombre de usuario")
         self.input_user.setStyleSheet("padding: 10px; font-size: 14px; border: 1px solid #BDBDBD; border-radius: 5px;")
+        self.input_user.returnPressed.connect(self.check_login)
         layout.addWidget(self.input_user)
 
         self.input_pass = QLineEdit()
         self.input_pass.setPlaceholderText("Contraseña")
         self.input_pass.setEchoMode(QLineEdit.EchoMode.Password)
         self.input_pass.setStyleSheet("padding: 10px; font-size: 14px; border: 1px solid #BDBDBD; border-radius: 5px;")
-
         self.input_pass.addAction(QIcon("ui/assets/lock.png"), QLineEdit.ActionPosition.TrailingPosition)
+        self.input_pass.returnPressed.connect(self.check_login)
         layout.addWidget(self.input_pass)
 
         self.button_login = QPushButton("Ingresar")
@@ -69,6 +72,10 @@ class LoginWindow(QWidget):
             QMessageBox.warning(self, "Error", "Completa todos los campos.")
             return
 
+        if self.attempts >= self.max_attempts:
+            QMessageBox.warning(self, "Bloqueado", "Demasiados intentos fallidos. Intenta más tarde.")
+            return
+
         if not usuario.isalnum():
             QMessageBox.warning(self, "Error", "Usuario inválido.")
             return
@@ -86,9 +93,11 @@ class LoginWindow(QWidget):
                 if rol not in ["admin", "empleado"]:
                     QMessageBox.warning(self, "Error", "Rol no autorizado.")
                     return
-                self.open_main_window(rol)  # Sin mensaje molesto
+                self.open_main_window(rol)
             else:
-                QMessageBox.warning(self, "Error", "Usuario o contraseña incorrectos.")
+                self.attempts += 1
+                remaining = self.max_attempts - self.attempts
+                QMessageBox.warning(self, "Error", f"Usuario o contraseña incorrectos. Intentos restantes: {remaining}")
                 self.input_pass.clear()
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Problema de conexión: {e}")
