@@ -1,9 +1,10 @@
 from PyQt6.QtWidgets import QMainWindow, QTabWidget, QWidget, QVBoxLayout, QMenuBar, QMessageBox, QDialog, QFormLayout, QLineEdit, QComboBox, QPushButton, QLabel
 from PyQt6.QtGui import QAction, QIcon
-from PyQt6.QtCore import QPropertyAnimation, QEasingCurve, Qt
+from PyQt6.QtCore import QPropertyAnimation, QEasingCurve, Qt, QTimer
 from Cafeteria.modules.inventory import InventoryWindow
 from Cafeteria.modules.sales import SalesWindow
 from Cafeteria.modules.reports import ReportsWindow
+from Cafeteria.modules.dashboard import DashboardWindow
 import sqlite3
 import hashlib
 
@@ -14,9 +15,14 @@ class MainWindow(QMainWindow):
         self.resize(1000, 700)
         self.rol = rol
         self.animation = None
+        self.dark_mode = False
         self.setup_ui()
         self.setup_menu()
         self.animate_tabs()
+
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.check_alerts)
+        self.timer.start(3600000)
 
     def setup_ui(self):
         self.tabs = QTabWidget()
@@ -32,10 +38,12 @@ class MainWindow(QMainWindow):
         self.inventory_tab = InventoryWindow(self.rol)
         self.sales_tab = SalesWindow()
         self.reports_tab = ReportsWindow()
+        self.dashboard_tab = DashboardWindow()
 
         self.tabs.addTab(self.inventory_tab, QIcon("ui/assets/Inventario.jpg"), "Inventario")
         self.tabs.addTab(self.sales_tab, QIcon("ui/assets/Ventas.jpg"), "Ventas")
         self.tabs.addTab(self.reports_tab, QIcon("ui/assets/Reportes.jpg"), "Reportes")
+        self.tabs.addTab(self.dashboard_tab, "Dashboard")
 
         self.tabs.currentChanged.connect(self.on_tab_changed)
 
@@ -53,6 +61,8 @@ class MainWindow(QMainWindow):
             self.inventory_tab.refresh_data()
         elif index == 1:
             self.sales_tab.load_products_safe()
+        elif index == 3:  # Dashboard
+            self.dashboard_tab.load_stats()
 
     def setup_menu(self):
         menubar = self.menuBar()
@@ -72,9 +82,27 @@ class MainWindow(QMainWindow):
             reset_data_action.triggered.connect(self.reset_data)
             file_menu.addAction(reset_data_action)
 
-        theme_action = QAction("Cambiar Tema", self)
-        theme_action.triggered.connect(lambda: QMessageBox.information(self, "Tema", "Función próximamente"))
-        view_menu.addAction(theme_action)
+        self.theme_action = QAction("Cambiar a Tema Oscuro", self)
+        self.theme_action.triggered.connect(self.toggle_theme)
+        view_menu.addAction(self.theme_action)
+
+    def toggle_theme(self):
+        try:
+            if self.dark_mode:
+                with open("ui/styles.qss", "r") as f:
+                    self.setStyleSheet(f.read())
+                self.theme_action.setText("Cambiar a Tema Oscuro")
+                self.dark_mode = False
+            else:
+                with open("ui/styles_dark.qss", "r") as f:
+                    self.setStyleSheet(f.read())
+                self.theme_action.setText("Cambiar a Tema Claro")
+                self.dark_mode = True
+        except FileNotFoundError:
+            QMessageBox.warning(self, "Error",
+                                "Archivo de estilos no encontrado. Verifica 'ui/styles.qss' o 'ui/styles_dark.qss'.")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Error al cambiar tema:\n{e}")
 
     def reset_data(self):
         reply1 = QMessageBox.question(self, "Confirmar Restablecimiento",
@@ -107,6 +135,30 @@ class MainWindow(QMainWindow):
             self.animation.setEndValue(1.0)
             self.animation.setEasingCurve(QEasingCurve.Type.InOutQuad)
             self.animation.start()
+
+    def check_alerts(self):
+        try:
+            conn = sqlite3.connect("cafeteria.db")
+            c = conn.cursor()
+            # Stock bajo (<=5)
+            c.execute("SELECT COUNT(*) FROM inventario WHERE cantidad <= 5")
+            low_stock_count = c.fetchone()[0]
+            # Vencimiento en 7 días
+            from datetime import datetime, timedelta
+            future_date = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
+            c.execute("SELECT COUNT(*) FROM inventario WHERE fecha_vencimiento <= ?", (future_date,))
+            expiring_count = c.fetchone()[0]
+            conn.close()
+
+            if low_stock_count > 0 or expiring_count > 0:
+                msg = "Notificación Automática:\n"
+                if low_stock_count > 0:
+                    msg += f"- {low_stock_count} productos con stock bajo.\n"
+                if expiring_count > 0:
+                    msg += f"- {expiring_count} productos por vencer."
+                QMessageBox.information(self, "Alerta", msg)
+        except Exception as e:
+            print(f"Error en alertas: {e}")
 
     def create_user(self):
         dialog = CreateUserDialog()
