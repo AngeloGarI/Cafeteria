@@ -8,7 +8,7 @@ import sqlite3
 import os
 import pandas as pd
 import traceback
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class SalesWindow(QWidget):
     def __init__(self):
@@ -21,6 +21,7 @@ class SalesWindow(QWidget):
 
     def setup_ui(self):
         layout = QVBoxLayout()
+
         title_layout = QHBoxLayout()
         title_layout.addStretch()
         title = QLabel("Ventas")
@@ -30,7 +31,7 @@ class SalesWindow(QWidget):
         title_layout.addStretch()
 
         image_label = QLabel()
-        image_pixmap = QPixmap("ui/assets/Logo.png").scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
+        image_pixmap = QPixmap("ui/assets/Logo.png").scaled(100, 100, Qt.AspectRatioMode.KeepAspectRatio)
         image_label.setPixmap(image_pixmap)
         title_layout.addStretch()
         title_layout.addWidget(image_label)
@@ -39,10 +40,13 @@ class SalesWindow(QWidget):
         form_layout = QHBoxLayout()
         self.product_combo = QComboBox()
         self.product_combo.setEditable(True)
+        self.product_combo.setToolTip("Selecciona o escribe el producto a vender")
         self.qty_input = QLineEdit()
         self.qty_input.setPlaceholderText("Cantidad")
+        self.qty_input.setToolTip("Ingresa la cantidad a vender (número positivo)")
         self.add_btn = QPushButton("Registrar Venta")
         self.add_btn.clicked.connect(self.add_sale_safe)
+        self.add_btn.setToolTip("Registra la venta y actualiza inventario")
 
         form_layout.addWidget(QLabel("Producto:"))
         form_layout.addWidget(self.product_combo)
@@ -50,8 +54,17 @@ class SalesWindow(QWidget):
         form_layout.addWidget(self.qty_input)
         form_layout.addWidget(self.add_btn)
 
+        filter_layout = QHBoxLayout()
+        self.date_filter_combo = QComboBox()
+        self.date_filter_combo.addItems(["Todas", "Hoy", "Esta Semana", "Este Mes"])
+        self.date_filter_combo.currentTextChanged.connect(self.filter_sales_by_date)
+        self.date_filter_combo.setToolTip("Filtra ventas por período de fecha")
+        filter_layout.addWidget(QLabel("Filtrar por fecha:"))
+        filter_layout.addWidget(self.date_filter_combo)
+
         self.export_btn = QPushButton("Exportar Ventas a Excel")
         self.export_btn.clicked.connect(self.export_sales_safe)
+        self.export_btn.setToolTip("Exporta las ventas filtradas a un archivo Excel")
 
         table_container = QWidget()
         table_layout = QVBoxLayout(table_container)
@@ -65,6 +78,7 @@ class SalesWindow(QWidget):
         table_layout.addWidget(self.table)
 
         layout.addLayout(form_layout)
+        layout.addLayout(filter_layout)
         layout.addWidget(self.export_btn)
         layout.addWidget(table_container)
         self.setLayout(layout)
@@ -103,6 +117,9 @@ class SalesWindow(QWidget):
 
         if not producto or not cantidad:
             QMessageBox.warning(self, "Error", "Completa todos los campos")
+            return
+        if len(producto) > 50 or not producto.replace(" ", "").isalnum():
+            QMessageBox.warning(self, "Error", "Producto debe tener máximo 50 caracteres y solo letras, números o espacios.")
             return
 
         try:
@@ -167,6 +184,27 @@ class SalesWindow(QWidget):
                     item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 self.table.setItem(i, j, item)
         self.table.resizeColumnsToContents()
+
+    def filter_sales_by_date(self):
+        filter_option = self.date_filter_combo.currentText()
+        now = datetime.now()
+        for row in range(self.table.rowCount()):
+            date_item = self.table.item(row, 3)  # Fecha
+            if date_item:
+                try:
+                    sale_date = datetime.strptime(date_item.text(), "%Y-%m-%d %H:%M:%S")
+                    if filter_option == "Hoy":
+                        show = sale_date.date() == now.date()
+                    elif filter_option == "Esta Semana":
+                        start_week = now - timedelta(days=now.weekday())
+                        show = start_week.date() <= sale_date.date() <= now.date()
+                    elif filter_option == "Este Mes":
+                        show = sale_date.year == now.year and sale_date.month == now.month
+                    else:
+                        show = True
+                    self.table.setRowHidden(row, not show)
+                except ValueError:
+                    self.table.setRowHidden(row, False)  # Muestra si fecha inválida
 
     def export_sales_safe(self):
         try:
