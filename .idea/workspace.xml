@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="faa64511-2682-431b-b455-6068e9ded40f" name="Changes" comment=".." />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/Cafeteria" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/Cafeteria" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;AngeloGarI&quot;
+  }
+}</component>
+  <component name="GitHubPullRequestState">{
+  &quot;prStates&quot;: [
+    {
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDOQH2jg86wpqia&quot;,
+        &quot;number&quot;: 2
+      },
+      &quot;lastSeen&quot;: 1761925457855
+    }
+  ]
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/AngeloGarI/Cafeteria.git&quot;,
+    &quot;accountId&quot;: &quot;d890088b-3a1b-40d3-ba4d-197ef7d07056&quot;
+  },
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
+    },
+    &quot;owner&quot;: &quot;AngeloGarI&quot;,
+    &quot;repository&quot;: &quot;Cafeteria&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="34TJ712oo61eix7y89HMI6rDWL4" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.Cafeteria_cod_prev.executor": "Run",
+    "Python.check_users.executor": "Run",
+    "Python.db_init.executor": "Run",
+    "Python.inventory.executor": "Run",
+    "Python.login_window.executor": "Run",
+    "Python.main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "#3 on Code-cafeteria",
+    "last_opened_file_path": "A:/Documentos/Proyecto Cafetería",
+    "run.code.analysis.last.selected.profile": "aDefault",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="A:\Documentos\Proyecto Cafetería" />
+      <recent name="A:\Documentos\Proyecto Cafetería\Cafeteria\ui" />
+      <recent name="A:\Documentos\Proyecto Cafetería\Cafeteria" />
+      <recent name="A:\Documentos\Proyecto Cafetería\Cafeteria\Cafeteria" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Proyecto Cafetería" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Cafeteria" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Cafeteria/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-b3d66beaba9a-c6efb3732140-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26199.168" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="faa64511-2682-431b-b455-6068e9ded40f" name="Changes" comment="" />
+      <created>1761231456942</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1761231456942</updated>
+      <workItem from="1762129284980" duration="14000" />
+    </task>
+    <task id="LOCAL-00016" summary="nombre y libreria lista">
+      <option name="closed" value="true" />
+      <created>1761361466189</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1761361466189</updated>
+    </task>
+    <task id="LOCAL-00017" summary="prueba de programa principal">
+      <option name="closed" value="true" />
+      <created>1761361481186</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1761361481186</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Falta arreglar importacion de libreria">
+      <option name="closed" value="true" />
+      <created>1761364953231</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1761364953231</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Sigue en pruebas">
+      <option name="closed" value="true" />
+      <created>1761364976801</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1761364976801</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Probando paleta de colores aun por seguir">
+      <option name="closed" value="true" />
+      <created>1761365002803</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1761365002803</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Correccion de errores.">
+      <option name="closed" value="true" />
+      <created>1761838784231</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1761838784231</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Errores por corregir">
+      <option name="closed" value="true" />
+      <created>1761838829801</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1761838829801</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Por ahora los errores están solucionados...">
+      <option name="closed" value="true" />
+      <created>1761863269829</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1761863269829</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Titulo y layout principal">
+      <option name="closed" value="true" />
+      <created>1761866680442</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1761866680442</updated>
+    </task>
+    <task id="LOCAL-00025" summary="botones, tablas y datos iniciales lista.">
+      <option name="closed" value="true" />
+      <created>1761867846140</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1761867846140</updated>
+    </task>
+    <task id="LOCAL-00026" summary="se agrego funcion para eliminar datos.">
+      <option name="closed" value="true" />
+      <created>1761872305177</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1761872305177</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Validacion de datos y reportes agregada aun experimental">
+      <option name="closed" value="true" />
+      <created>1761872392705</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1761872392705</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Restaurar contraseña implementada aun por mejorar login">
+      <option name="closed" value="true" />
+      <created>1761875305705</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1761875305705</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Seguridad mejorada">
+      <option name="closed" value="true" />
+      <created>1761875344748</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1761875344748</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Modulo de ventas lista, aun viendo mejoras">
+      <option name="closed" value="true" />
+      <created>1761875499750</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1761875499750</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Pequeño cambio de letra">
+      <option name="closed" value="true" />
+      <created>1761875564289</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1761875564289</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Pequeño cambio de letra">
+      <option name="closed" value="true" />
+      <created>1761925097622</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1761925097622</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Modulo de ventas lista, aun verificando si hay mejoras.">
+      <option name="closed" value="true" />
+      <created>1761925249048</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1761925249048</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Mejoras agregadas: advertencia de stock bajo, productos con bajo stock, boton para refrescar página, validacion de admin en eliminar datos, nombres duplicados, precios mayores a 0 y tamaño de ventana mejorada.">
+      <option name="closed" value="true" />
+      <created>1761973250582</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1761973250582</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Mensajes mas claros, para mejor guia">
+      <option name="closed" value="true" />
+      <created>1761973300308</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1761973300308</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Mensaje de error eliminado">
+      <option name="closed" value="true" />
+      <created>1761973432171</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1761973432171</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Llamadas de archivos arreglada">
+      <option name="closed" value="true" />
+      <created>1761973454458</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1761973454458</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Validacion para que el administrador pueda crear usuarios, y botones agregados">
+      <option name="closed" value="true" />
+      <created>1761973517574</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1761973517574</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Advertencia de vencimiento para el inventario">
+      <option name="closed" value="true" />
+      <created>1761973567746</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1761973567746</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Datetime agregado para menor tiempo de espera en el inventario">
+      <option name="closed" value="true" />
+      <created>1761973635306</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1761973635306</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Errores eliminados">
+      <option name="closed" value="true" />
+      <created>1761973714966</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1761973714966</updated>
+    </task>
+    <task id="LOCAL-00042" summary="estilo de colores como letras y campos cambiados">
+      <option name="closed" value="true" />
+      <created>1761973747540</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1761973747540</updated>
+    </task>
+    <task id="LOCAL-00043" summary="archivo innecesario">
+      <option name="closed" value="true" />
+      <created>1761973878620</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1761973878620</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Base de datos: se agregó campos de fecha y categoria">
+      <option name="closed" value="true" />
+      <created>1762040616349</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1762040616349</updated>
+    </task>
+    <task id="LOCAL-00045" summary="se agregó la fecha de vencimiento a inventario.">
+      <option name="closed" value="true" />
+      <created>1762040696218</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1762040696218</updated>
+    </task>
+    <task id="LOCAL-00046" summary="logos centrados">
+      <option name="closed" value="true" />
+      <created>1762040784889</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1762040784889</updated>
+    </task>
+    <task id="LOCAL-00047" summary="ventana de advertencia quitada, texto fijo en pantalla">
+      <option name="closed" value="true" />
+      <created>1762040834785</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1762040834785</updated>
+    </task>
+    <task id="LOCAL-00048" summary="ventana de advertencia de stock quitada, boton para revisar cuando se desee">
+      <option name="closed" value="true" />
+      <created>1762040914046</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1762040914046</updated>
+    </task>
+    <task id="LOCAL-00049" summary="Imagenes para mejorar la interfaz">
+      <option name="closed" value="true" />
+      <created>1762142762765</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1762142762765</updated>
+    </task>
+    <task id="LOCAL-00050" summary="agregacion de imagenes en cada panel del menu,">
+      <option name="closed" value="true" />
+      <created>1762142801028</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1762142801028</updated>
+    </task>
+    <task id="LOCAL-00051" summary="Boton para restablecer datos de inventario y ventas">
+      <option name="closed" value="true" />
+      <created>1762142861243</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1762142861243</updated>
+    </task>
+    <task id="LOCAL-00052" summary="Paleta de colores mejorada.">
+      <option name="closed" value="true" />
+      <created>1762142877813</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1762142877813</updated>
+    </task>
+    <task id="LOCAL-00053" summary="Cambio de imagen en la esquina superior">
+      <option name="closed" value="true" />
+      <created>1762187483225</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1762187483225</updated>
+    </task>
+    <task id="LOCAL-00054" summary="Eliminado por error">
+      <option name="closed" value="true" />
+      <created>1762187499394</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1762187499394</updated>
+    </task>
+    <task id="LOCAL-00055" summary="Comentarios borrados">
+      <option name="closed" value="true" />
+      <created>1762187511553</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1762187511553</updated>
+    </task>
+    <task id="LOCAL-00056" summary="Mensajes mas claros">
+      <option name="closed" value="true" />
+      <created>1762299632929</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1762299632931</updated>
+    </task>
+    <task id="LOCAL-00057" summary="La persona ingresa al presionar enter">
+      <option name="closed" value="true" />
+      <created>1762299661855</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1762299661855</updated>
+    </task>
+    <task id="LOCAL-00058" summary="muestra los productos mas vendidos, los del inventario y total de ventas al mes">
+      <option name="closed" value="true" />
+      <created>1762299722295</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1762299722295</updated>
+    </task>
+    <task id="LOCAL-00059" summary="Con (panda) se pueden exportar datos de excel">
+      <option name="closed" value="true" />
+      <created>1762299762017</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1762299762017</updated>
+    </task>
+    <task id="LOCAL-00060" summary="muestra una notificación cada hora si para los stocks bajos y los que estan por vencer. aun con error para cambiar el tema">
+      <option name="closed" value="true" />
+      <created>1762299902765</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1762299902765</updated>
+    </task>
+    <task id="LOCAL-00061" summary="filtro por fechas para las ventas, y limite de caracteres">
+      <option name="closed" value="true" />
+      <created>1762299983675</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1762299983675</updated>
+    </task>
+    <task id="LOCAL-00062" summary="tema de color negro aun por implementarse correctamente pero ya listo.">
+      <option name="closed" value="true" />
+      <created>1762300032450</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1762300032450</updated>
+    </task>
+    <task id="LOCAL-00063" summary="Todo se paso a carpeta de Cafeteria">
+      <option name="closed" value="true" />
+      <created>1762461566645</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1762461566646</updated>
+    </task>
+    <task id="LOCAL-00064" summary="..">
+      <option name="closed" value="true" />
+      <created>1762462147990</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1762462147990</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
+    <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.qss" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Datetime agregado para menor tiempo de espera en el inventario" />
+    <MESSAGE value="Errores eliminados" />
+    <MESSAGE value="estilo de colores como letras y campos cambiados" />
+    <MESSAGE value="archivo innecesario" />
+    <MESSAGE value="Base de datos: se agregó campos de fecha y categoria" />
+    <MESSAGE value="se agregó la fecha de vencimiento a inventario." />
+    <MESSAGE value="logos centrados" />
+    <MESSAGE value="ventana de advertencia quitada, texto fijo en pantalla" />
+    <MESSAGE value="ventana de advertencia de stock quitada, boton para revisar cuando se desee" />
+    <MESSAGE value="Imagenes para mejorar la interfaz" />
+    <MESSAGE value="agregacion de imagenes en cada panel del menu," />
+    <MESSAGE value="Boton para restablecer datos de inventario y ventas" />
+    <MESSAGE value="Paleta de colores mejorada." />
+    <MESSAGE value="Cambio de imagen en la esquina superior" />
+    <MESSAGE value="Eliminado por error" />
+    <MESSAGE value="Comentarios borrados" />
+    <MESSAGE value="Mensajes mas claros" />
+    <MESSAGE value="La persona ingresa al presionar enter" />
+    <MESSAGE value="muestra los productos mas vendidos, los del inventario y total de ventas al mes" />
+    <MESSAGE value="Con (panda) se pueden exportar datos de excel" />
+    <MESSAGE value="muestra una notificación cada hora si para los stocks bajos y los que estan por vencer. aun con error para cambiar el tema" />
+    <MESSAGE value="filtro por fechas para las ventas, y limite de caracteres" />
+    <MESSAGE value="tema de color negro aun por implementarse correctamente pero ya listo." />
+    <MESSAGE value="Todo se paso a carpeta de Cafeteria" />
+    <MESSAGE value=".." />
+    <option name="LAST_COMMIT_MESSAGE" value=".." />
+  </component>
+</project>

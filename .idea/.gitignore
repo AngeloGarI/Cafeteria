@@ -1,0 +1,17 @@
+# Entorno virtual
+venv/
+.env
+*.sqlite
+*.db
+
+# Archivos de cache
+__pycache__/
+*.pyc
+
+# Archivos generados en runtime
+*.log
+backup_*.db
+
+# Configuración del IDE
+.idea/
+.vscode/
