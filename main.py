@@ -7,7 +7,6 @@ import shutil
 from datetime import datetime
 from PyQt6.QtWidgets import QApplication
 from ui.login_window import LoginWindow
-from database.db_init import init_db
 
 def setup_database():
     db_path = "cafeteria.db"
