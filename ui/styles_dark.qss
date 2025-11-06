@@ -1,6 +1,0 @@
-QMainWindow, QWidget { background: #2E2E2E; color: #FFFFFF; }
-QPushButton { background: #555555; color: white; }
-QLineEdit, QComboBox { background: #333333; color: white; border: 2px solid #777777; }
-QLabel { color: #FFFFFF; }
-QTableWidget { background: #333333; alternate-background-color: #444444; }
-QHeaderView::section { background: #555555; color: white; }
