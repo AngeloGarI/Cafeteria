@@ -4,6 +4,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import sqlite3
 import logging
 import shutil
+import hashlib
 from datetime import datetime
 from PyQt6.QtWidgets import QApplication
 from ui.login_window import LoginWindow
@@ -42,6 +43,10 @@ def setup_database():
         c.execute("ALTER TABLE ventas ADD COLUMN usuario TEXT DEFAULT 'admin'")
     except sqlite3.OperationalError:
         pass
+    c.execute("SELECT COUNT(*) FROM usuarios WHERE usuario = ?", ("admin",))
+    if c.fetchone()[0] == 0:
+        hashed_password = hashlib.sha256("1234".encode()).hexdigest()
+        c.execute("INSERT INTO usuarios (usuario, contrasena, rol) VALUES (?, ?, ?)", ("admin", hashed_password, "admin"))
 
     # Índices para rendimiento
     c.execute("CREATE INDEX IF NOT EXISTS idx_producto ON inventario(producto)")
