@@ -1,0 +1,34 @@
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Virtual env ---
+venv/
+env/
+.venv/
+
+# --- IDEs ---
+.idea/
+.vscode/
+*.swp
+
+# --- SQLite Databases ---
+*.db
+*.sqlite3
+database/*.db
+
+# --- Logs ---
+*.log
+
+# --- Backups ---
+backup_*.db
+
+# --- PyQt6 ---
+*.qss~
+*.ui~
+
+# --- Windows /
+Thumbs.db
+desktop.ini
