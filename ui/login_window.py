@@ -93,7 +93,7 @@ class LoginWindow(QWidget):
                 if rol not in ["admin", "empleado"]:
                     QMessageBox.warning(self, "Error", "Rol no autorizado.")
                     return
-                self.open_main_window(rol)
+                self.open_main_window(rol, usuario)
             else:
                 self.attempts += 1
                 remaining = self.max_attempts - self.attempts
@@ -102,8 +102,8 @@ class LoginWindow(QWidget):
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Problema de conexión: {e}")
 
-    def open_main_window(self, rol):
-        self.main = MainWindow(rol)
+    def open_main_window(self, rol, usuario):
+        self.main = MainWindow(rol, usuario)
         self.main.show()
         self.close()
 

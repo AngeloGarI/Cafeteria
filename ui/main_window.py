@@ -9,11 +9,12 @@ import sqlite3
 import hashlib
 
 class MainWindow(QMainWindow):
-    def __init__(self, rol):
+    def __init__(self, rol, usuario_actual):
         super().__init__()
         self.setWindowTitle("Sistema de Cafetería - Profesional")
         self.resize(1000, 700)
         self.rol = rol
+        self.usuario_actual = usuario_actual
         self.animation = None
         self.dark_mode = False
         self.setup_ui()
@@ -35,9 +36,9 @@ class MainWindow(QMainWindow):
         """)
 
         self.inventory_tab = InventoryWindow(self.rol)
-        self.sales_tab = SalesWindow()
-        self.reports_tab = ReportsWindow()
-        self.dashboard_tab = DashboardWindow()
+        self.sales_tab = SalesWindow(self.usuario_actual)
+        self.reports_tab = ReportsWindow(self.usuario_actual)
+        self.dashboard_tab = DashboardWindow(self.rol, self.usuario_actual)
 
         self.tabs.addTab(self.inventory_tab, QIcon("ui/assets/Inventario.jpg"), "Inventario")
         self.tabs.addTab(self.sales_tab, QIcon("ui/assets/Ventas.jpg"), "Ventas")
@@ -59,8 +60,8 @@ class MainWindow(QMainWindow):
         if index == 0:
             self.inventory_tab.refresh_data()
         elif index == 1:
-            self.sales_tab.load_products_safe()
-        elif index == 3:  # Dashboard
+            self.sales_tab.load_sales_safe()
+        elif index == 3:
             self.dashboard_tab.load_stats()
 
     def setup_menu(self):

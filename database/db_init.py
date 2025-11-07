@@ -40,7 +40,8 @@ def init_db():
                 producto TEXT NOT NULL,
                 cantidad INTEGER NOT NULL,
                 total REAL NOT NULL,
-                fecha TEXT NOT NULL
+                fecha TEXT NOT NULL,
+                usuario TEXT NOT NULL  -- Agregada columna usuario
             );
         """)
 

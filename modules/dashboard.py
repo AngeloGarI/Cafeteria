@@ -3,8 +3,10 @@ import sqlite3
 from datetime import datetime
 
 class DashboardWindow(QWidget):
-    def __init__(self):
+    def __init__(self, rol, usuario_actual):
         super().__init__()
+        self.rol = rol
+        self.usuario_actual = usuario_actual
         self.setup_ui()
         self.load_stats()
 
@@ -22,20 +24,25 @@ class DashboardWindow(QWidget):
         try:
             conn = sqlite3.connect("cafeteria.db")
             c = conn.cursor()
-            # Total ventas este mes
             current_month = datetime.now().strftime("%Y-%m")
-            c.execute("SELECT SUM(total) FROM ventas WHERE fecha LIKE ?", (f"{current_month}%",))
+            if self.rol != "admin":
+                c.execute("SELECT SUM(total) FROM ventas WHERE fecha LIKE ? AND usuario = ?", (f"{current_month}%", self.usuario_actual))
+            else:
+                c.execute("SELECT SUM(total) FROM ventas WHERE fecha LIKE ?", (f"{current_month}%",))
             total_sales = c.fetchone()[0] or 0
             self.total_sales_label.setText(f"Total Ventas (Este Mes): Q{total_sales:.2f}")
-            # Conteo inventario
             c.execute("SELECT COUNT(*) FROM inventario")
             inventory_count = c.fetchone()[0]
             self.inventory_count_label.setText(f"Productos en Inventario: {inventory_count}")
-            # Producto más vendido
-            c.execute("SELECT producto, SUM(cantidad) as total FROM ventas GROUP BY producto ORDER BY total DESC LIMIT 1")
+            if self.rol != "admin":
+                c.execute("SELECT producto, SUM(cantidad) as total FROM ventas WHERE usuario = ? GROUP BY producto ORDER BY total DESC LIMIT 1", (self.usuario_actual,))
+            else:
+                c.execute("SELECT producto, SUM(cantidad) as total FROM ventas GROUP BY producto ORDER BY total DESC LIMIT 1")
             top = c.fetchone()
             if top:
                 self.top_product_label.setText(f"Producto Más Vendido: {top[0]} ({top[1]} unidades)")
+            else:
+                self.top_product_label.setText("Producto Más Vendido: Ninguno")
             conn.close()
         except Exception as e:
             self.total_sales_label.setText(f"Error: {e}")
