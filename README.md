@@ -16,7 +16,7 @@ Un sistema creado en Python + PyQt6, pensado para llevar inventario, ventas, rep
 🗄️ SQLite	Base de datos local automática.
 🛠️ Requisitos
 
-Python 3.8+
+Python 3.13
 
 PyQt6
 
