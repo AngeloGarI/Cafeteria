@@ -1,10 +1,10 @@
 from PyQt6.QtWidgets import QMainWindow, QTabWidget, QWidget, QVBoxLayout, QMenuBar, QMessageBox, QDialog, QFormLayout, QLineEdit, QComboBox, QPushButton, QLabel
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtCore import QPropertyAnimation, QEasingCurve, Qt, QTimer
-from Cafeteria.modules.inventory import InventoryWindow
-from Cafeteria.modules.sales import SalesWindow
-from Cafeteria.modules.reports import ReportsWindow
-from Cafeteria.modules.dashboard import DashboardWindow
+from modules.inventory import InventoryWindow
+from modules.sales import SalesWindow
+from modules.reports import ReportsWindow
+from modules.dashboard import DashboardWindow
 import sqlite3
 import hashlib
 

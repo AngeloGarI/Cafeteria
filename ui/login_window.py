@@ -3,7 +3,7 @@ from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6.QtCore import Qt
 import sqlite3
 import hashlib
-from Cafeteria.ui.main_window import MainWindow
+from ui.main_window import MainWindow
 
 class LoginWindow(QWidget):
     def __init__(self):
