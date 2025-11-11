@@ -5,57 +5,12 @@ import sqlite3
 import logging
 import shutil
 import hashlib
+import zipfile
 from datetime import datetime
 from PyQt6.QtWidgets import QApplication
+from PyQt6.QtCore import QTimer
 from ui.login_window import LoginWindow
-
-def setup_database():
-    db_path = "cafeteria.db"
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
-
-    c.execute('''CREATE TABLE IF NOT EXISTS usuarios (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    usuario TEXT UNIQUE NOT NULL,
-                    contrasena TEXT NOT NULL,
-                    rol TEXT NOT NULL
-                )''')
-
-    c.execute('''CREATE TABLE IF NOT EXISTS inventario (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    producto TEXT UNIQUE NOT NULL,
-                    categoria TEXT,
-                    cantidad INTEGER NOT NULL,
-                    precio REAL NOT NULL,
-                    fecha_vencimiento TEXT
-                )''')
-
-    c.execute('''CREATE TABLE IF NOT EXISTS ventas (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    producto TEXT NOT NULL,
-                    cantidad INTEGER NOT NULL,
-                    total REAL NOT NULL,
-                    fecha TEXT NOT NULL,
-                    usuario TEXT NOT NULL  -- Nueva columna para rastrear quién vendió
-                )''')
-
-    try:
-        c.execute("ALTER TABLE ventas ADD COLUMN usuario TEXT DEFAULT 'admin'")
-    except sqlite3.OperationalError:
-        pass
-    c.execute("SELECT COUNT(*) FROM usuarios WHERE usuario = ?", ("admin",))
-    if c.fetchone()[0] == 0:
-        hashed_password = hashlib.sha256("1234".encode()).hexdigest()
-        c.execute("INSERT INTO usuarios (usuario, contrasena, rol) VALUES (?, ?, ?)", ("admin", hashed_password, "admin"))
-
-    # Índices para rendimiento
-    c.execute("CREATE INDEX IF NOT EXISTS idx_producto ON inventario(producto)")
-    c.execute("CREATE INDEX IF NOT EXISTS idx_fecha ON inventario(fecha_vencimiento)")
-    c.execute("CREATE INDEX IF NOT EXISTS idx_venta_fecha ON ventas(fecha)")
-    c.execute("CREATE INDEX IF NOT EXISTS idx_venta_usuario ON ventas(usuario)")
-
-    conn.commit()
-    conn.close()
+from database.db_init import init_db
 
 def setup_logging():
     logging.basicConfig(
@@ -67,13 +22,19 @@ def setup_logging():
 def backup_database():
     db_path = "cafeteria.db"
     if os.path.exists(db_path):
-        backup_path = f"backup_{datetime.now().strftime('%Y%m%d')}.db"
-        shutil.copy(db_path, backup_path)
-        print(f"Backup creado: {backup_path}")
+        backup_dir = "backups"
+        os.makedirs(backup_dir, exist_ok=True)
+        backup_path = os.path.join(backup_dir, f"backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip")
+        try:
+            with zipfile.ZipFile(backup_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                zipf.write(db_path, os.path.basename(db_path))
+            print(f"Backup automático creado: {backup_path}")
+        except Exception as e:
+            print(f"Error en backup: {e}")
 
 if __name__ == "__main__":
     setup_logging()
-    setup_database()
+    init_db()
     backup_database()
 
     app = QApplication(sys.argv)
@@ -82,6 +43,10 @@ if __name__ == "__main__":
             app.setStyleSheet(f.read())
     except FileNotFoundError:
         pass
+
+    backup_timer = QTimer()
+    backup_timer.timeout.connect(backup_database)
+    backup_timer.start(86400000)
 
     window = LoginWindow()
     window.show()

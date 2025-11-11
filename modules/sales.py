@@ -11,11 +11,11 @@ import traceback
 from datetime import datetime, timedelta
 
 class SalesWindow(QWidget):
-    def __init__(self, usuario_actual="admin"):  # Recibe usuario actual
+    def __init__(self, usuario_actual="admin"):
         super().__init__()
         self.setWindowTitle("Ventas - Cafetería")
         self.resize(700, 400)
-        self.usuario_actual = usuario_actual  # Guardar usuario
+        self.usuario_actual = usuario_actual
         self.setup_ui()
         self.load_products_safe()
         self.load_sales_safe()
@@ -73,7 +73,7 @@ class SalesWindow(QWidget):
 
         self.table = QTableWidget(table_container)
         self.table.setColumnCount(5)
-        self.table.setHorizontalHeaderLabels(["Producto", "Cantidad", "Total", "Fecha", "Usuario"])
+        self.table.setHorizontalHeaderLabels(["Usuario", "Fecha", "Producto", "Cantidad", "Total"])
         self.table.setAlternatingRowColors(True)
 
         table_layout.addWidget(self.table)
@@ -174,9 +174,9 @@ class SalesWindow(QWidget):
         conn = sqlite3.connect(self.get_db_path())
         c = conn.cursor()
         if self.usuario_actual != "admin":
-            c.execute("SELECT producto, cantidad, total, fecha, usuario FROM ventas WHERE usuario = ?", (self.usuario_actual,))
+            c.execute("SELECT usuario, fecha, producto, cantidad, total FROM ventas WHERE usuario = ?", (self.usuario_actual,))
         else:
-            c.execute("SELECT producto, cantidad, total, fecha, usuario FROM ventas")
+            c.execute("SELECT usuario, fecha, producto, cantidad, total FROM ventas")
         rows = c.fetchall()
         conn.close()
 
@@ -184,7 +184,7 @@ class SalesWindow(QWidget):
         for i, row in enumerate(rows):
             for j, val in enumerate(row):
                 item = QTableWidgetItem(str(val))
-                if j in [1,2]:
+                if j in [3, 4]:
                     item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
                 self.table.setItem(i, j, item)
         self.table.resizeColumnsToContents()
@@ -193,7 +193,7 @@ class SalesWindow(QWidget):
         filter_option = self.date_filter_combo.currentText()
         now = datetime.now()
         for row in range(self.table.rowCount()):
-            date_item = self.table.item(row, 3)  # Fecha
+            date_item = self.table.item(row, 1)
             if date_item:
                 try:
                     sale_date = datetime.strptime(date_item.text(), "%Y-%m-%d %H:%M:%S")
@@ -208,7 +208,7 @@ class SalesWindow(QWidget):
                         show = True
                     self.table.setRowHidden(row, not show)
                 except ValueError:
-                    self.table.setRowHidden(row, False)  # Muestra si fecha inválida
+                    self.table.setRowHidden(row, False)
 
     def export_sales_safe(self):
         try:
@@ -231,7 +231,7 @@ class SalesWindow(QWidget):
             QMessageBox.warning(self, "Sin datos", "No hay ventas visibles para exportar.")
             return
 
-        df = pd.DataFrame(visible_rows, columns=["Producto", "Cantidad", "Total", "Fecha", "Usuario"])
+        df = pd.DataFrame(visible_rows, columns=["Usuario", "Fecha", "Producto", "Cantidad", "Total"])
         suggested = "ventas_filtradas.xlsx"
         path, _ = QFileDialog.getSaveFileName(self, "Guardar ventas filtradas", suggested, "Excel Files (*.xlsx)")
         if not path:

@@ -103,7 +103,7 @@ class ReportsWindow(QWidget):
         conn = sqlite3.connect(db_path)
         if table_name == "ventas" and self.usuario_actual != "admin":
             df = pd.read_sql_query("SELECT * FROM ventas WHERE usuario = ?", conn, params=(self.usuario_actual,))
-        else:  # Admins ven todas
+        else:
             df = pd.read_sql_query(f"SELECT * FROM {table_name}", conn)
         conn.close()
 

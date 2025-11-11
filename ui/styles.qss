@@ -1,11 +1,11 @@
-/* Fondo beige claro cálido */
+/* Fondo beige claro cálido con gradiente sutil */
 QMainWindow, QWidget {
     background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #f1e3d8, stop:1 #e1b495);
     font-family: 'Segoe UI', Arial, sans-serif;
     font-size: 14px;
 }
 
-/* Botones rosa fuerte con hover rosa claro */
+/* Botones rosa fuerte con hover rosa claro y animación */
 QPushButton {
     background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #cf2762, stop:1 #b02452);
     color: white;
@@ -14,26 +14,31 @@ QPushButton {
     padding: 10px 15px;
     font-weight: bold;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
 }
 QPushButton:hover {
     background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #f4a3b2, stop:1 #e890a0);
     box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+    transform: scale(1.05);  /* Escala ligera */
 }
 QPushButton:pressed {
     background: #b02452;
     box-shadow: inset 2px 2px 5px rgba(0,0,0,0.4);
+    transform: scale(0.95);  /* Bounce */
 }
 
-/* Campos con borde beige medio y foco rosa */
+/* Campos con borde beige medio y foco rosa, con sombra */
 QLineEdit, QComboBox {
     background-color: #FFFFFF;
     border: 2px solid #e1b495;
     border-radius: 6px;
     padding: 8px;
     color: #000000;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
 }
 QLineEdit:focus, QComboBox:focus {
     border-color: #cf2762;
+    box-shadow: 0 0 5px rgba(207, 39, 98, 0.5);
 }
 
 /* Etiquetas negras para contraste */
@@ -42,12 +47,13 @@ QLabel {
     font-size: 14px;
 }
 
-/* Tablas con headers naranja para energía */
+/* Tablas con headers naranja para energía y sombras */
 QTableWidget {
     background-color: #FFFFFF;
     alternate-background-color: #f4a3b2;
     gridline-color: #e1b495;
     border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
     selection-background-color: #cf2762;
 }
 QHeaderView::section {
@@ -56,19 +62,20 @@ QHeaderView::section {
     padding: 8px;
     border: none;
     font-weight: bold;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 }
 QTableWidget::item {
     color: #000000;
     padding: 5px;
 }
 
-/* Tabs rosa con hover naranja */
-QTabWidget::pane { border: 2px solid #e1b495; background: #f1e3d8; border-radius: 10px; }
-QTabBar::tab { background: #cf2762; color: white; padding: 12px; border-radius: 8px; margin: 2px; min-width: 100px; }
+/* Tabs rosa con hover naranja y sombras */
+QTabWidget::pane { border: 2px solid #e1b495; background: #f1e3d8; border-radius: 10px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1); }
+QTabBar::tab { background: #cf2762; color: white; padding: 12px; border-radius: 8px; margin: 2px; min-width: 100px; box-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
 QTabBar::tab:selected { background: #b02452; font-weight: bold; }
-QTabBar::tab:hover { background: #d98046; }
+QTabBar::tab:hover { background: #d98046; transform: scale(1.02); }
 
-/* Diálogos beige claro con borde rosa */
+/* Diálogos beige claro con borde rosa y sombras */
 QDialog, QMessageBox {
     background: #f1e3d8;
     border-radius: 10px;
@@ -79,13 +86,13 @@ QDialog QLabel, QMessageBox QLabel {
 }
 
 /* Barra de menú rosa con letras blancas para contraste */
-QMenuBar { background: #cf2762; color: white; }
+QMenuBar { background: #cf2762; color: white; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); }
 QMenuBar::item { background: transparent; padding: 5px 10px; color: white; }
 QMenuBar::item:selected { background: #d98046; }
 
-/* Animaciones */
+/* Animaciones generales */
 QWidget {
-    transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out, transform 0.3s ease;
 }
 
 /* Íconos */
