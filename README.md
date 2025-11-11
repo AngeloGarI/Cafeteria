@@ -5,18 +5,28 @@ Gestión moderna para cafeterías modernas
 Un sistema creado en Python + PyQt6, pensado para llevar inventario, ventas, reportes, usuarios y estadísticas con la suavidad de un latte bien batido.
 
 ✨ ¿Qué ofrece este sistema?
+
 Área	Funciones
+
 🔐 Autenticación	Inicio de sesión con roles (Admin / Empleado).
+
 📦 Inventario	Agregar, editar y controlar productos, stock y vencimientos.
+
 💰 Ventas	Registra ventas y descuenta stock automáticamente.
+
 📊 Reportes	Reportes por usuario o fecha y exportación.
+
 📈 Dashboard	Ventas del día, producto top y estado general.
+
 🚨 Alertas	Stock bajo y productos por vencer.
+
 🎨 Temas	Tema claro y oscuro para la vista cansada.
+
 🗄️ SQLite	Base de datos local automática.
+
 🛠️ Requisitos
 
-Python 3.8+
+Python 3.13
 
 PyQt6
 
