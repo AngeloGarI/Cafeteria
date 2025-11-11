@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox, QDialog, QFormLayout
 from PyQt6.QtGui import QPixmap, QIcon
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve
 import sqlite3
 import hashlib
 from ui.main_window import MainWindow
@@ -9,11 +9,13 @@ class LoginWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Login - Cafetería")
+        self.setWindowIcon(QIcon("ui/assets/Login.jpg"))
         self.resize(500, 450)
         self.setStyleSheet("background-color: #FFFFFF;")
         self.attempts = 0
         self.max_attempts = 3
         self.setup_ui()
+        self.animate_window()
 
     def setup_ui(self):
         layout = QVBoxLayout()
@@ -46,7 +48,7 @@ class LoginWindow(QWidget):
 
         self.button_login = QPushButton("Ingresar")
         self.button_login.setStyleSheet("""
-            background-color: #8B5E3C;  /* Café */
+            background-color: #8B5E3C;
             color: white;
             padding: 12px;
             font-size: 16px;
@@ -54,7 +56,9 @@ class LoginWindow(QWidget):
             border: none;
             border-radius: 8px;
         """)
+        self.button_login.clicked.connect(self.animate_button)
         self.button_login.clicked.connect(self.check_login)
+        self.button_login.setToolTip("Haz clic para ingresar")
         layout.addWidget(self.button_login)
 
         self.button_forgot = QPushButton("¿Olvidaste tu contraseña?")
@@ -63,6 +67,24 @@ class LoginWindow(QWidget):
         layout.addWidget(self.button_forgot)
 
         self.setLayout(layout)
+
+    def animate_window(self):
+        self.animation = QPropertyAnimation(self, b"windowOpacity")
+        self.animation.setDuration(800)
+        self.animation.setStartValue(0.0)
+        self.animation.setEndValue(1.0)
+        self.animation.setEasingCurve(QEasingCurve.Type.InOutQuad)
+        self.animation.start()
+
+    def animate_button(self):
+        self.button_animation = QPropertyAnimation(self.button_login, b"geometry")
+        start_rect = self.button_login.geometry()
+        end_rect = start_rect.adjusted(-5, -5, 5, 5)
+        self.button_animation.setDuration(200)
+        self.button_animation.setStartValue(start_rect)
+        self.button_animation.setEndValue(end_rect)
+        self.button_animation.setEasingCurve(QEasingCurve.Type.InOutBounce)
+        self.button_animation.start()
 
     def check_login(self):
         usuario = self.input_user.text().strip()
@@ -110,7 +132,6 @@ class LoginWindow(QWidget):
     def forgot_password(self):
         dialog = ForgotPasswordDialog()
         dialog.exec()
-
 
 class ForgotPasswordDialog(QDialog):
     def __init__(self):

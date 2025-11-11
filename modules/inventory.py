@@ -15,7 +15,7 @@ class InventoryWindow(QWidget):
         self.resize(900, 500)
         self.rol = rol
         self.setup_ui()
-        self.load_data_safe()
+        self.load_data_safe() #polimo
 
     def setup_ui(self):
         layout = QVBoxLayout()
@@ -99,12 +99,12 @@ class InventoryWindow(QWidget):
         table_layout = QVBoxLayout(table_container)
         table_layout.setContentsMargins(0, 0, 0, 0)
 
-        self.table = QTableWidget(table_container)
+        self.table = QTableWidget(table_container) # puntero
         self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels(["Producto", "Categoría", "Cantidad", "Precio (Q)", "Fecha Vencimiento"])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.table.setAlternatingRowColors(True)
-        self.table.setSortingEnabled(True)
+        self.table.setSortingEnabled(True) #Ordenamiento
 
         table_layout.addWidget(self.table)
 
@@ -125,10 +125,10 @@ class InventoryWindow(QWidget):
             QMessageBox.critical(self, "Error", f"Error al cargar inventario:\n{e}")
 
     def load_data(self):
-        conn = sqlite3.connect(self.get_db_path())
+        conn = sqlite3.connect(self.get_db_path()) #puntero a base
         c = conn.cursor()
-        c.execute("SELECT producto, categoria, cantidad, precio, fecha_vencimiento FROM inventario ORDER BY producto ASC")
-        rows = c.fetchall()
+        c.execute("SELECT producto, categoria, cantidad, precio, fecha_vencimiento FROM inventario ORDER BY producto ASC") #ordenamineto
+        rows = c.fetchall() #Lista
         conn.close()
 
         self.table.setRowCount(len(rows))
@@ -140,7 +140,7 @@ class InventoryWindow(QWidget):
                 self.table.setItem(i, j, item)
 
     def filter_table(self):
-        search_text = self.search_input.text().lower()
+        search_text = self.search_input.text().lower() #busqueda
         category_filter = self.filter_combo.currentText().lower()
         for row in range(self.table.rowCount()):
             item = self.table.item(row, 0)

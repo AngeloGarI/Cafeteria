@@ -5,6 +5,9 @@ from modules.inventory import InventoryWindow
 from modules.sales import SalesWindow
 from modules.reports import ReportsWindow
 from modules.dashboard import DashboardWindow
+from modules.charts import ChartsWindow  # Import para gráficos
+from modules.demo import DemoWindow  # Import para demo
+
 import sqlite3
 import hashlib
 
@@ -39,11 +42,13 @@ class MainWindow(QMainWindow):
         self.sales_tab = SalesWindow(self.usuario_actual)
         self.reports_tab = ReportsWindow(self.usuario_actual)
         self.dashboard_tab = DashboardWindow(self.rol, self.usuario_actual)
+        self.charts_tab = ChartsWindow(self.rol, self.usuario_actual)
 
         self.tabs.addTab(self.inventory_tab, QIcon("ui/assets/Inventario.jpg"), "Inventario")
         self.tabs.addTab(self.sales_tab, QIcon("ui/assets/Ventas.jpg"), "Ventas")
         self.tabs.addTab(self.reports_tab, QIcon("ui/assets/Reportes.jpg"), "Reportes")
         self.tabs.addTab(self.dashboard_tab, "Dashboard")
+        self.tabs.addTab(self.charts_tab, "Estadísticas")  # Agregar tab
 
         self.tabs.currentChanged.connect(self.on_tab_changed)
 
@@ -63,6 +68,8 @@ class MainWindow(QMainWindow):
             self.sales_tab.load_sales_safe()
         elif index == 3:
             self.dashboard_tab.load_stats()
+        elif index == 4:
+            self.charts_tab.load_charts()
 
     def setup_menu(self):
         menubar = self.menuBar()
@@ -70,8 +77,12 @@ class MainWindow(QMainWindow):
         view_menu = menubar.addMenu("Vista")
 
         exit_action = QAction(QIcon("ui/assets/Salir.jpg"), "Salir", self)
-        exit_action.triggered.connect(self.close)
+        exit_action.triggered.connect(self.confirm_exit)
         file_menu.addAction(exit_action)
+
+        demo_action = QAction("Demo Algoritmos", self)
+        demo_action.triggered.connect(self.open_demo)
+        file_menu.addAction(demo_action)
 
         if self.rol == "admin":
             create_user_action = QAction("Crear Usuario", self)
@@ -85,6 +96,15 @@ class MainWindow(QMainWindow):
         self.theme_action = QAction("Cambiar a Tema Oscuro", self)
         self.theme_action.triggered.connect(self.toggle_theme)
         view_menu.addAction(self.theme_action)
+
+    def confirm_exit(self):
+        reply = QMessageBox.question(self, "Confirmar Salida", "¿Seguro que quieres salir?", QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        if reply == QMessageBox.StandardButton.Yes:
+            self.close()
+
+    def open_demo(self):
+        self.demo_window = DemoWindow()
+        self.demo_window.show()
 
     def toggle_theme(self):
         try:
@@ -157,7 +177,7 @@ class MainWindow(QMainWindow):
                     msg += f"- {expiring_count} productos por vencer."
                 QMessageBox.information(self, "Alerta", msg)
         except Exception as e:
-            print(f"Error en alertas: {e}")  # O usa logging
+            print(f"Error en alertas: {e}")
 
     def create_user(self):
         dialog = CreateUserDialog()
@@ -183,8 +203,7 @@ class CreateUserDialog(QDialog):
         self.button_create.clicked.connect(self.create_user)
 
         layout.addRow("Usuario:", self.input_user)
-        layout.addRow("Contraseña:", self.input_pass)
-        layout.addRow("Rol:", self.role_combo)
+        layout.addRow("Contraseña:", self.role_combo)
         layout.addRow(self.button_create)
         self.setLayout(layout)
 
